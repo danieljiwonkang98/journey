@@ -66,7 +66,13 @@ class CoreAppBar extends StatelessWidget implements PreferredSizeWidget {
           // Logo on the left
           Padding(
             padding: const EdgeInsets.only(left: 32),
-            child: Image.asset('assets/images/JourneyTextLogo.png', height: 24),
+            child: InkWell(
+              onTap: () => Get.offNamed(AppRoutes.HOME),
+              child: Image.asset(
+                'assets/images/JourneyTextLogo.png',
+                height: 24,
+              ),
+            ),
           ),
           // Navigation buttons in center
           if (MediaQuery.of(context).size.width > 600) ...[
@@ -75,7 +81,7 @@ class CoreAppBar extends StatelessWidget implements PreferredSizeWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 _buildNavButton('WHO WE ARE', AppRoutes.ABOUT),
-                _buildNavButton('WORKS', AppRoutes.HOME),
+                _buildNavButton('WORKS', AppRoutes.WORKS),
                 _buildNavButton('SERVICES', AppRoutes.HOME),
                 _buildNavButton('LET\'S TALK', AppRoutes.HOME),
               ],
@@ -90,7 +96,7 @@ class CoreAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   Widget _buildNavButton(String title, String route) {
     return TextButton(
-      onPressed: () => Get.toNamed(route),
+      onPressed: () => Get.offNamed(route),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Text(

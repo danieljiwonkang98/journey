@@ -2,6 +2,71 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:journey/core/themes/colors.dart';
 
+class ArrowIcon extends StatelessWidget {
+  const ArrowIcon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 40,
+      height: 40,
+      child: CustomPaint(painter: ArrowIconPainter()),
+    );
+  }
+}
+
+class ArrowIconPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    // Background circle
+    final bgPaint = Paint()
+      ..color = AppColors.blue
+      ..style = PaintingStyle.fill;
+    canvas.drawCircle(
+      Offset(size.width / 2, size.height / 2),
+      size.width / 2,
+      bgPaint,
+    );
+
+    // Dot
+    final dotPaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.fill;
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(10, 18.8887, 2.77778, 2.77778),
+        const Radius.circular(1.38889),
+      ),
+      dotPaint,
+    );
+
+    // Arrow
+    final arrowPaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.fill;
+    final arrowPath = Path()
+      ..moveTo(23.4628, 14.5734)
+      ..lineTo(25.4268, 14.5734)
+      ..lineTo(29.8712, 19.0178)
+      ..lineTo(29.8712, 20.9818)
+      ..lineTo(25.4268, 25.4263)
+      ..lineTo(23.4628, 25.4263)
+      ..lineTo(23.4628, 23.4623)
+      ..lineTo(25.5363, 21.3887)
+      ..lineTo(15.5559, 21.3887)
+      ..lineTo(14.167, 19.9998)
+      ..lineTo(15.5559, 18.6109)
+      ..lineTo(25.5363, 18.6109)
+      ..lineTo(23.4628, 16.5374)
+      ..lineTo(23.3673, 16.4321)
+      ..close();
+    canvas.drawPath(arrowPath, arrowPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
 class SpeedMeetQuality extends StatelessWidget {
   const SpeedMeetQuality({super.key});
 
@@ -53,14 +118,10 @@ class SpeedMeetQuality extends StatelessWidget {
               ),
               const SizedBox(width: 16),
               Image.asset(
-                'assets/images/home/section4/kindletters.png',
+                'assets/images/home/section4/hype.png',
                 width: MediaQuery.of(context).size.width * 0.8,
               ),
-              const SizedBox(width: 16),
-              Image.asset(
-                'assets/images/home/section4/kindletters.png',
-                width: MediaQuery.of(context).size.width * 0.8,
-              ),
+              //TODO ADD MORE
             ],
           ),
         ),
@@ -75,15 +136,16 @@ class SpeedMeetQuality extends StatelessWidget {
                 // Handle tap action
               },
               child: Container(
-                height: 56,
                 constraints: const BoxConstraints(minWidth: 80),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 4,
+                padding: const EdgeInsets.only(
+                  left: 28,
+                  right: 12,
+                  top: 12,
+                  bottom: 12,
                 ),
                 decoration: BoxDecoration(
                   color: AppColors.black,
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.circular(48),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
@@ -98,8 +160,8 @@ class SpeedMeetQuality extends StatelessWidget {
                         height: 1,
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    const Icon(Icons.add, color: Colors.white, size: 24),
+                    const SizedBox(width: 20),
+                    const ArrowIcon(),
                   ],
                 ),
               ),

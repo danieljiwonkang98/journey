@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:journey/core/themes/colors.dart';
+import 'package:journey/core/widgets/chat_about_widget.dart';
 
 class DontJustTakeWord extends StatelessWidget {
   const DontJustTakeWord({super.key});
@@ -61,20 +63,9 @@ class DontJustTakeWord extends StatelessWidget {
             height: 140,
           ),
         ),
-        const SizedBox(height: 314),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Text(
-            'Ready to turn your idea into reality?\nLet\'s start today.',
-            style: GoogleFonts.museoModerno(
-              color: AppColors.black,
-              fontSize: 64,
-              fontWeight: FontWeight.w600,
-              height: 1.4, // This gives us the 140% line height
-            ),
-          ),
-        ),
-        const SizedBox(height: 414),
+        const SizedBox(height: 140),
+
+        ChatAboutWidget(),
       ],
     );
   }

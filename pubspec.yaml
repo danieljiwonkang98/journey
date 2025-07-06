@@ -74,6 +74,7 @@ flutter:
     - assets/images/home/section4/
     - assets/images/home/section5/
     - assets/images/home/section6/
+    - assets/images/works/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
