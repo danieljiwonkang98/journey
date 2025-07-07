@@ -85,7 +85,7 @@ class CoreAppBar extends StatelessWidget implements PreferredSizeWidget {
               children: [
                 _buildNavButton('WHO WE ARE', AppRoutes.ABOUT),
                 _buildNavButton('WORKS', AppRoutes.WORKS),
-                _buildNavButton('SERVICES', AppRoutes.HOME),
+                _buildNavButton('HOW WE WORK', AppRoutes.HOW_WE_WORK),
                 _buildNavButton('LET\'S TALK', AppRoutes.HOME),
               ],
             ),

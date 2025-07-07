@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:journey/core/routes/app_routes.dart';
 import 'package:journey/core/themes/colors.dart';
 import 'package:journey/core/widgets/chat_about_widget.dart';
 import 'package:journey/core/widgets/core_app_bar.dart';
@@ -37,7 +39,7 @@ class WorksView extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'We invent, test, and build \u2014 before being asked.\nThese are projects we created because we couldn\'t not make them.',
+                  'We invent, test, and build \u2014 before being asked.\nThese are projects we created because we couldn\'t NOT make them.',
                   style: GoogleFonts.poppins(
                     color: const Color(0xFF454545),
                     fontSize: 24,
@@ -83,7 +85,7 @@ class WorksView extends StatelessWidget {
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
                         onTap: () {
-                          // TODO: Add navigation to KindLetters details
+                          Get.toNamed(AppRoutes.KINDLETTERS_DETAIL);
                         },
                         child: Image.asset(
                           'assets/images/works/kindletters.png',

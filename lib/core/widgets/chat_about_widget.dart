@@ -118,7 +118,7 @@ class ChatAboutWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
-                onPressed: () {},
+                onPressed: () => Get.toNamed(AppRoutes.HOW_WE_WORK),
                 child: Text(
                   'How It Works',
                   style: GoogleFonts.museoModerno(
@@ -230,7 +230,7 @@ class ChatAboutWidget extends StatelessWidget {
 
         Center(
           child: Text(
-            '© 2025 YourAgency Inc. All rights reserved.\nFast, integrated development from prototype to product.',
+            '© 2025 Journey Inc. All rights reserved.\nFast, integrated development from prototype to product.',
             style: GoogleFonts.poppins(
               color: const Color(0xFFB3B3B3),
               fontSize: 14,

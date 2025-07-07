@@ -7,6 +7,7 @@ class AppColors {
   static const Color purple = Color(0xFFA66BFB);
   static const Color red = Color(0xFFE2838C);
   static const Color black = Color(0xFF2C2C2C);
+  static const Color gray = Color(0xFFF1F2F4);
 
   //? Text Colors
   static const Color textNeutral20 = Color(0xFF454545); //Text/Body-Neutral-20
