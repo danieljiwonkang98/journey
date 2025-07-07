@@ -66,11 +66,14 @@ class CoreAppBar extends StatelessWidget implements PreferredSizeWidget {
           // Logo on the left
           Padding(
             padding: const EdgeInsets.only(left: 32),
-            child: InkWell(
-              onTap: () => Get.offNamed(AppRoutes.HOME),
-              child: Image.asset(
-                'assets/images/JourneyTextLogo.png',
-                height: 24,
+            child: MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: GestureDetector(
+                onTap: () => Get.offNamed(AppRoutes.HOME),
+                child: Image.asset(
+                  'assets/images/JourneyTextLogo.png',
+                  height: 24,
+                ),
               ),
             ),
           ),
@@ -96,7 +99,7 @@ class CoreAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   Widget _buildNavButton(String title, String route) {
     return TextButton(
-      onPressed: () => Get.offNamed(route),
+      onPressed: () => Get.toNamed(route, preventDuplicates: false),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Text(

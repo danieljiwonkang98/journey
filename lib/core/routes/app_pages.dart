@@ -6,8 +6,20 @@ import 'app_routes.dart';
 
 class AppPages {
   static final routes = [
-    GetPage(name: AppRoutes.HOME, page: () => const HomeView()),
-    GetPage(name: AppRoutes.ABOUT, page: () => const AboutView()),
-    GetPage(name: AppRoutes.WORKS, page: () => const WorksView()),
+    GetPage(
+      name: AppRoutes.HOME,
+      page: () => const HomeView(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: AppRoutes.ABOUT,
+      page: () => const AboutView(),
+      transition: Transition.noTransition,
+    ),
+    GetPage(
+      name: AppRoutes.WORKS,
+      page: () => const WorksView(),
+      transition: Transition.noTransition,
+    ),
   ];
 }
