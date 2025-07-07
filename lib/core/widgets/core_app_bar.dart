@@ -71,7 +71,7 @@ class CoreAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: GestureDetector(
                 onTap: () => Get.offNamed(AppRoutes.HOME),
                 child: Image.asset(
-                  'assets/images/JourneyTextLogo.png',
+                  'assets/images/journey/JourneyTextLogo.png',
                   height: 24,
                 ),
               ),

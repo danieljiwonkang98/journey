@@ -106,7 +106,7 @@ class ChatAboutWidget extends StatelessWidget {
         const SizedBox(height: 72),
         Center(
           child: SvgPicture.asset(
-            'assets/images/journey_logo.svg',
+            'assets/images/journey/journey_logo.svg',
             width: 56,
             height: 56,
           ),
