@@ -76,6 +76,7 @@ class SpeedMeetQuality extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
+        const SizedBox(height: 220),
         Container(
           width: double.infinity,
           alignment: Alignment.centerLeft,

@@ -120,7 +120,7 @@ class ChatAboutWidget extends StatelessWidget {
               TextButton(
                 onPressed: () => Get.toNamed(AppRoutes.HOW_WE_WORK),
                 child: Text(
-                  'How It Works',
+                  'How We Work',
                   style: GoogleFonts.museoModerno(
                     color: const Color(0xFF454545),
                     fontSize: 16,
@@ -134,7 +134,7 @@ class ChatAboutWidget extends StatelessWidget {
               TextButton(
                 onPressed: () {},
                 child: Text(
-                  'Why Us',
+                  'Who We Are',
                   style: GoogleFonts.museoModerno(
                     color: const Color(0xFF454545),
                     fontSize: 16,
@@ -148,7 +148,7 @@ class ChatAboutWidget extends StatelessWidget {
               TextButton(
                 onPressed: () => Get.toNamed(AppRoutes.WORKS),
                 child: Text(
-                  'Portfolio',
+                  'What We Make',
                   style: GoogleFonts.museoModerno(
                     color: const Color(0xFF454545),
                     fontSize: 16,

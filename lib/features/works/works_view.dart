@@ -100,7 +100,7 @@ class WorksView extends StatelessWidget {
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
                         onTap: () {
-                          // TODO: Add navigation to Hype details
+                          Get.toNamed(AppRoutes.HYPE_DETAIL);
                         },
                         child: Image.asset(
                           'assets/images/works/hype.png',
@@ -121,7 +121,7 @@ class WorksView extends StatelessWidget {
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
                         onTap: () {
-                          // TODO: Add navigation to InterviewShield details
+                          Get.toNamed(AppRoutes.INTERVIEWSHIELD_DETAIL);
                         },
                         child: Image.asset(
                           'assets/images/works/interviewshield.png',
@@ -136,7 +136,7 @@ class WorksView extends StatelessWidget {
                       cursor: SystemMouseCursors.click,
                       child: GestureDetector(
                         onTap: () {
-                          // TODO: Add navigation to RazorCode details
+                          Get.toNamed(AppRoutes.RAZORCODE_DETAIL);
                         },
                         child: Image.asset(
                           'assets/images/works/razorcode.png',

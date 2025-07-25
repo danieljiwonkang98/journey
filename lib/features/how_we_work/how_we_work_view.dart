@@ -7,7 +7,6 @@ import 'package:journey/features/how_we_work/widget/titled_info_box.dart';
 import 'package:journey/features/how_we_work/widget/titled_text_section.dart';
 import 'package:journey/features/how_we_work/widget/pricing_comparison_row.dart';
 import 'package:journey/features/how_we_work/widget/metric_box.dart';
-import 'package:flutter/services.dart';
 
 class HowWeWorkView extends StatelessWidget {
   const HowWeWorkView({super.key});
@@ -87,7 +86,7 @@ class HowWeWorkView extends StatelessWidget {
                   Expanded(
                     child: TitledInfoBox(
                       title: 'Senior Team',
-                      subtitle: 'Designer + developer working together',
+                      subtitle: 'Designer + Developer working together',
                     ),
                   ),
                   const SizedBox(width: 20),
@@ -167,7 +166,7 @@ class HowWeWorkView extends StatelessWidget {
                     TitledTextSection(
                       title: 'Exclusive Attention',
                       subtitle:
-                          "We only take 6 projects at a time. You get our full focus.\nCurrently serving 4 of 6 clients.",
+                          "We only take 6 projects at a time. You get our full focus.",
                     ),
                   ],
                 ),

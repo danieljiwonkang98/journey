@@ -5,8 +5,8 @@ import 'package:journey/core/widgets/chat_about_widget.dart';
 import 'package:journey/core/widgets/core_app_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class KindlettersDetailView extends StatelessWidget {
-  const KindlettersDetailView({super.key});
+class RazorCodeDetailView extends StatelessWidget {
+  const RazorCodeDetailView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class KindlettersDetailView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.asset(
-                'assets/images/works/kindletters/kindletters_header.png',
+                'assets/images/works/razorcode/razorcode_header.png',
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
               ),
@@ -29,7 +29,7 @@ class KindlettersDetailView extends StatelessWidget {
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
-                  'KindLetters',
+                  'RazorCode',
                   style: GoogleFonts.museoModerno(
                     color: const Color(0xFF2C2C2C),
                     fontSize: 48,
@@ -42,7 +42,7 @@ class KindlettersDetailView extends StatelessWidget {
               const SizedBox(height: 8),
 
               Text(
-                'A community built on empathy',
+                'Code Any App in Days, Not Weeks',
                 style: GoogleFonts.poppins(
                   color: const Color(0xFF454545),
                   fontSize: 24,
@@ -54,7 +54,7 @@ class KindlettersDetailView extends StatelessWidget {
               const SizedBox(height: 8),
 
               Text(
-                'We wanted to create a space where people could speak without being judged — and be heard by someone who cares.',
+                'Can AI actually reduce dev time without reducing control?',
                 style: GoogleFonts.poppins(
                   color: const Color(0xFF454545),
                   fontSize: 20,
@@ -70,7 +70,7 @@ class KindlettersDetailView extends StatelessWidget {
                 child: Row(
                   children: [
                     Text(
-                      'Emotional UI',
+                      'AI Tool',
                       style: GoogleFonts.poppins(
                         color: const Color(0xFF808080),
                         fontSize: 14,
@@ -91,7 +91,7 @@ class KindlettersDetailView extends StatelessWidget {
                     ),
                     const SizedBox(width: 12),
                     Text(
-                      'Community',
+                      'Developer Experience',
                       style: GoogleFonts.poppins(
                         color: const Color(0xFF808080),
                         fontSize: 14,
@@ -113,7 +113,7 @@ class KindlettersDetailView extends StatelessWidget {
                     const SizedBox(width: 12),
 
                     Text(
-                      'UX Research',
+                      'Productivity',
                       style: GoogleFonts.poppins(
                         color: const Color(0xFF808080),
                         fontSize: 14,
@@ -159,7 +159,7 @@ class KindlettersDetailView extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'KindLetters is a heartfelt platform where users can share their feelings anonymously and receive comforting replies. It\'s built on trust, softness, and sincerity - not metrics.',
+                            'RazorCode is an AI coding assistant that analyzes your entire codebase in real-time and suggests optimal code snippets, voice-controlled commands, and kanban-based task flow.',
                             style: GoogleFonts.poppins(
                               color: const Color(0xFF808080),
                               fontSize: 18,
@@ -195,7 +195,7 @@ class KindlettersDetailView extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'UI Design',
+                              'AI Product UX',
                               style: GoogleFonts.poppins(
                                 color: const Color(0xFF808080),
                                 fontSize: 16,
@@ -205,7 +205,7 @@ class KindlettersDetailView extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'Interaction Design',
+                              'Voice Interface Design',
                               style: GoogleFonts.poppins(
                                 color: const Color(0xFF808080),
                                 fontSize: 16,
@@ -215,7 +215,7 @@ class KindlettersDetailView extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'Brand Identity',
+                              'WebApp Architecture',
                               style: GoogleFonts.poppins(
                                 color: const Color(0xFF808080),
                                 fontSize: 16,
@@ -225,7 +225,7 @@ class KindlettersDetailView extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'Frontend Development',
+                              'Product Branding',
                               style: GoogleFonts.poppins(
                                 color: const Color(0xFF808080),
                                 fontSize: 16,
@@ -258,7 +258,7 @@ class KindlettersDetailView extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Mental Health',
+                              'Developer Tools',
                               style: GoogleFonts.poppins(
                                 color: const Color(0xFF808080),
                                 fontSize: 16,
@@ -268,7 +268,17 @@ class KindlettersDetailView extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              'Community',
+                              'Productivity',
+                              style: GoogleFonts.poppins(
+                                color: const Color(0xFF808080),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                height: 1.6,
+                                letterSpacing: 0.08,
+                              ),
+                            ),
+                            Text(
+                              'AI',
                               style: GoogleFonts.poppins(
                                 color: const Color(0xFF808080),
                                 fontSize: 16,
@@ -291,7 +301,7 @@ class KindlettersDetailView extends StatelessWidget {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () {
-                    launchUrl(Uri.parse('https://kindletters.xyz/'));
+                    launchUrl(Uri.parse('https://razorcode.ai/'));
                   },
                   child: Image.asset(
                     'assets/images/works/kindletters/visit_site_button.png',
@@ -306,14 +316,14 @@ class KindlettersDetailView extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Image.asset(
-                      'assets/images/works/kindletters/kindletters1.png',
+                      'assets/images/works/razorcode/razorcode1.png',
                       fit: BoxFit.contain,
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Image.asset(
-                      'assets/images/works/kindletters/kindletters2.png',
+                      'assets/images/works/razorcode/razorcode2.png',
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -321,7 +331,7 @@ class KindlettersDetailView extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Image.asset(
-                'assets/images/works/kindletters/kindletters3.png',
+                'assets/images/works/razorcode/razorcode3.png',
                 width: double.infinity,
                 fit: BoxFit.contain,
               ),
@@ -330,14 +340,14 @@ class KindlettersDetailView extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Image.asset(
-                      'assets/images/works/kindletters/kindletters4.png',
+                      'assets/images/works/razorcode/razorcode4.png',
                       fit: BoxFit.contain,
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Image.asset(
-                      'assets/images/works/kindletters/kindletters5.png',
+                      'assets/images/works/razorcode/razorcode5.png',
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -345,7 +355,7 @@ class KindlettersDetailView extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Image.asset(
-                'assets/images/works/kindletters/kindletters6.png',
+                'assets/images/works/razorcode/razorcode6.png',
                 width: double.infinity,
                 fit: BoxFit.contain,
               ),
@@ -354,14 +364,14 @@ class KindlettersDetailView extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Image.asset(
-                      'assets/images/works/kindletters/kindletters7.png',
+                      'assets/images/works/razorcode/razorcode7.png',
                       fit: BoxFit.contain,
                     ),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
                     child: Image.asset(
-                      'assets/images/works/kindletters/kindletters8.png',
+                      'assets/images/works/razorcode/razorcode8.png',
                       fit: BoxFit.contain,
                     ),
                   ),
