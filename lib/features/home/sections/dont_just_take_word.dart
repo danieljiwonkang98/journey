@@ -13,42 +13,42 @@ class DontJustTakeWord extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 100),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Text(
-            'Don\'t Just Take Our Word For It',
-            style: GoogleFonts.museoModerno(
-              color: Colors.black,
-              fontSize: 64,
-              fontWeight: FontWeight.w600,
-              height: 1.4, // This gives us the 140% line height
-            ),
-          ),
-        ),
-        const SizedBox(height: 48),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              const SizedBox(width: 32),
-              Image.asset(
-                'assets/images/home/section6/Testimonial-1.png',
-                height: 300,
-              ),
-              const SizedBox(width: 16),
-              Image.asset(
-                'assets/images/home/section6/Testimonial-2.png',
-                height: 300,
-              ),
-              const SizedBox(width: 16),
-              Image.asset(
-                'assets/images/home/section6/Testimonial-3.png',
-                height: 300,
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 140),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal: 32),
+        //   child: Text(
+        //     'Don\'t Just Take Our Word For It',
+        //     style: GoogleFonts.museoModerno(
+        //       color: Colors.black,
+        //       fontSize: 64,
+        //       fontWeight: FontWeight.w600,
+        //       height: 1.4, // This gives us the 140% line height
+        //     ),
+        //   ),
+        // ),
+        // const SizedBox(height: 48),
+        // SingleChildScrollView(
+        //   scrollDirection: Axis.horizontal,
+        //   child: Row(
+        //     children: [
+        //       const SizedBox(width: 32),
+        //       Image.asset(
+        //         'assets/images/home/section6/Testimonial-1.png',
+        //         height: 300,
+        //       ),
+        //       const SizedBox(width: 16),
+        //       Image.asset(
+        //         'assets/images/home/section6/Testimonial-2.png',
+        //         height: 300,
+        //       ),
+        //       const SizedBox(width: 16),
+        //       Image.asset(
+        //         'assets/images/home/section6/Testimonial-3.png',
+        //         height: 300,
+        //       ),
+        //     ],
+        //   ),
+        // ),
+        // const SizedBox(height: 140),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 32),
           child: Image.asset(

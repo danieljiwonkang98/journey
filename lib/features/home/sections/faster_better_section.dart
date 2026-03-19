@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:journey/core/routes/app_routes.dart';
 
 class FasterBetterSection extends StatelessWidget {
   const FasterBetterSection({super.key});
@@ -15,7 +17,7 @@ class FasterBetterSection extends StatelessWidget {
               cursor: SystemMouseCursors.click,
               child: GestureDetector(
                 onTap: () {
-                  debugPrint('Image clicked!');
+                  Get.toNamed(AppRoutes.HYPE_DETAIL);
                 },
                 child: Image.asset(
                   'assets/images/home/section2/home2.png',

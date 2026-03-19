@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:journey/core/routes/app_routes.dart';
 import 'package:journey/core/themes/colors.dart';
 
 class ArrowIcon extends StatelessWidget {
@@ -113,14 +115,30 @@ class SpeedMeetQuality extends StatelessWidget {
           child: Row(
             children: [
               const SizedBox(width: 32),
-              Image.asset(
-                'assets/images/home/section4/kindletters.png',
-                width: MediaQuery.of(context).size.width * 0.8,
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {
+                    Get.toNamed(AppRoutes.KINDLETTERS_DETAIL);
+                  },
+                  child: Image.asset(
+                    'assets/images/home/section4/kindletters.png',
+                    width: MediaQuery.of(context).size.width * 0.8,
+                  ),
+                ),
               ),
               const SizedBox(width: 16),
-              Image.asset(
-                'assets/images/home/section4/hype.png',
-                width: MediaQuery.of(context).size.width * 0.8,
+              MouseRegion(
+                cursor: SystemMouseCursors.click,
+                child: GestureDetector(
+                  onTap: () {
+                    Get.toNamed(AppRoutes.HYPE_DETAIL);
+                  },
+                  child: Image.asset(
+                    'assets/images/home/section4/hype.png',
+                    width: MediaQuery.of(context).size.width * 0.8,
+                  ),
+                ),
               ),
               //TODO ADD MORE
             ],
@@ -134,7 +152,7 @@ class SpeedMeetQuality extends StatelessWidget {
             cursor: SystemMouseCursors.click,
             child: GestureDetector(
               onTap: () {
-                // Handle tap action
+                Get.toNamed(AppRoutes.WORKS);
               },
               child: Container(
                 constraints: const BoxConstraints(minWidth: 80),

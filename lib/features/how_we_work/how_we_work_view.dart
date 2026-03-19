@@ -7,6 +7,7 @@ import 'package:journey/features/how_we_work/widget/titled_info_box.dart';
 import 'package:journey/features/how_we_work/widget/titled_text_section.dart';
 import 'package:journey/features/how_we_work/widget/pricing_comparison_row.dart';
 import 'package:journey/features/how_we_work/widget/metric_box.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HowWeWorkView extends StatelessWidget {
   const HowWeWorkView({super.key});
@@ -103,8 +104,8 @@ class HowWeWorkView extends StatelessWidget {
               MouseRegion(
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
-                  onTap: () {
-                    // TODO: Add tap handling
+                onTap: () {
+                    launchUrl(Uri.parse('mailto:daniel@startjourney.today'));
                   },
                   child: Image.asset(
                     'assets/images/how_we_work/start_risk_free_button.png',
@@ -168,100 +169,107 @@ class HowWeWorkView extends StatelessWidget {
                       subtitle:
                           "We only take 6 projects at a time. You get our full focus.",
                     ),
+
+                    const SizedBox(height: 53),
+
+                    Container(
+                      height: 1,
+                      color: const Color(0xFFE6E6E6),
+                      width: double.infinity,
+                    ),
                   ],
                 ),
               ),
 
-              const SizedBox(height: 140),
+              // const SizedBox(height: 140),
 
-              Text(
-                'Why We\'re the Smart Choice',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.museoModerno(
-                  color: const Color(0xFF2C2C2C),
-                  fontSize: 64,
-                  fontWeight: FontWeight.w600,
-                  height: 1.4,
-                ),
-              ),
+              // Text(
+              //   'Why We\'re the Smart Choice',
+              //   textAlign: TextAlign.center,
+              //   style: GoogleFonts.museoModerno(
+              //     color: const Color(0xFF2C2C2C),
+              //     fontSize: 64,
+              //     fontWeight: FontWeight.w600,
+              //     height: 1.4,
+              //   ),
+              // ),
 
-              const SizedBox(height: 48),
-              const PricingComparisonRow(
-                row1Text: 'Freelancer',
-                row2Text: 'Our Agency',
-                row3Text: 'Enterprise Agencies',
-                isHighlighted: true,
-              ),
-              const SizedBox(height: 37),
-              const PricingComparisonRow(
-                row1Text: '\$5K–\$15K projects',
-                row2Text: '\$15K–\$125K projects',
-                row3Text: '\$100K–\$500K+ projects',
-              ),
-              const SizedBox(height: 37),
-              const PricingComparisonRow(
-                row1Text: 'No guarantees',
-                row2Text: 'Money-back guarantee',
-                row3Text: 'Complex contracts',
-              ),
-              const SizedBox(height: 37),
-              const PricingComparisonRow(
-                row1Text: 'Solo developers',
-                row2Text: 'Senior integrated team',
-                row3Text: 'Large teams with overhead',
-              ),
-              const SizedBox(height: 37),
-              const PricingComparisonRow(
-                row1Text: 'Variable quality',
-                row2Text: 'Consistent senior work',
-                row3Text: 'Process-heavy delivery',
-              ),
-              const SizedBox(height: 37),
-              const PricingComparisonRow(
-                row1Text: 'High project risk',
-                row2Text: 'Zero risk to you',
-                row3Text: 'Expensive but slow',
-              ),
-              const SizedBox(height: 80),
+              // const SizedBox(height: 48),
+              // const PricingComparisonRow(
+              //   row1Text: 'Freelancer',
+              //   row2Text: 'Our Agency',
+              //   row3Text: 'Enterprise Agencies',
+              //   isHighlighted: true,
+              // ),
+              // const SizedBox(height: 37),
+              // const PricingComparisonRow(
+              //   row1Text: '\$5K–\$15K projects',
+              //   row2Text: '\$15K–\$125K projects',
+              //   row3Text: '\$100K–\$500K+ projects',
+              // ),
+              // const SizedBox(height: 37),
+              // const PricingComparisonRow(
+              //   row1Text: 'No guarantees',
+              //   row2Text: 'Money-back guarantee',
+              //   row3Text: 'Complex contracts',
+              // ),
+              // const SizedBox(height: 37),
+              // const PricingComparisonRow(
+              //   row1Text: 'Solo developers',
+              //   row2Text: 'Senior integrated team',
+              //   row3Text: 'Large teams with overhead',
+              // ),
+              // const SizedBox(height: 37),
+              // const PricingComparisonRow(
+              //   row1Text: 'Variable quality',
+              //   row2Text: 'Consistent senior work',
+              //   row3Text: 'Process-heavy delivery',
+              // ),
+              // const SizedBox(height: 37),
+              // const PricingComparisonRow(
+              //   row1Text: 'High project risk',
+              //   row2Text: 'Zero risk to you',
+              //   row3Text: 'Expensive but slow',
+              // ),
+              // const SizedBox(height: 80),
 
-              Text(
-                'Why settle for freelancer uncertainty or pay enterprise premiums? We deliver senior-level apps at fair project rates — with full money-back guarantee.',
-                textAlign: TextAlign.center,
-                style: GoogleFonts.poppins(
-                  color: const Color(0xFF808080),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  height: 1.6,
-                  letterSpacing: 0.1,
-                ),
-              ),
-              const SizedBox(height: 158),
-              Text(
-                'Performance Metrics',
-                style: GoogleFonts.museoModerno(
-                  color: const Color(0xFF2C2C2C),
-                  fontSize: 40,
-                  fontWeight: FontWeight.w600,
-                  height: 1.5,
-                ),
-              ),
-              const SizedBox(height: 31),
+              // Text(
+              //   'Why settle for freelancer uncertainty or pay enterprise premiums? We deliver senior-level apps at fair project rates — with full money-back guarantee.',
+              //   textAlign: TextAlign.center,
+              //   style: GoogleFonts.poppins(
+              //     color: const Color(0xFF808080),
+              //     fontSize: 20,
+              //     fontWeight: FontWeight.w500,
+              //     height: 1.6,
+              //     letterSpacing: 0.1,
+              //   ),
+              // ),
+              // const SizedBox(height: 158),
+              // Text(
+              //   'Performance Metrics',
+              //   style: GoogleFonts.museoModerno(
+              //     color: const Color(0xFF2C2C2C),
+              //     fontSize: 40,
+              //     fontWeight: FontWeight.w600,
+              //     height: 1.5,
+              //   ),
+              // ),
+              // const SizedBox(height: 31),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const MetricBox(text: '100% Client Satisfaction'),
-                  const SizedBox(width: 20),
-                  const MetricBox(text: '100% On-Time Delivery'),
-                  const SizedBox(width: 20),
-                  const MetricBox(text: 'Reached Top 40 in App Store'),
-                  const SizedBox(width: 20),
-                  const MetricBox(
-                    text: '0 Refunds Processed\n(last 12 months)',
-                  ),
-                ],
-              ),
-
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.center,
+              //   children: [
+              //     const MetricBox(text: '100% Client Satisfaction'),
+              //     const SizedBox(width: 20),
+              //     const MetricBox(text: '100% On-Time Delivery'),
+              //     const SizedBox(width: 20),
+              //     const MetricBox(text: 'Reached Top 40 in App Store'),
+              //     const SizedBox(width: 20),
+              //     const MetricBox(
+              //       text: '0 Refunds Processed\n(last 12 months)',
+              //     ),
+              //   ],
+              // ),
               const SizedBox(height: 200),
               ChatAboutWidget(),
             ],

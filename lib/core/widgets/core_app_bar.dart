@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:journey/core/routes/app_routes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CoreAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CoreAppBar({super.key});
@@ -25,7 +26,9 @@ class CoreAppBar extends StatelessWidget implements PreferredSizeWidget {
                 padding: const EdgeInsets.only(right: 32),
                 child: InkWell(
                   onTap: () {
-                    // TODO: Implement prototype request action
+                    launchUrl(
+                      Uri.parse('mailto:daniel@startjourney.today'),
+                    );
                   },
                   child: Container(
                     height: 48,
@@ -83,10 +86,10 @@ class CoreAppBar extends StatelessWidget implements PreferredSizeWidget {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                _buildNavButton('WHO WE ARE', AppRoutes.ABOUT),
+                // _buildNavButton('WHO WE ARE', AppRoutes.ABOUT),
                 _buildNavButton('WHAT WE MAKE', AppRoutes.WORKS),
                 _buildNavButton('HOW WE WORK', AppRoutes.HOW_WE_WORK),
-                _buildNavButton('LET\'S TALK', AppRoutes.HOME),
+                // _buildNavButton('LET\'S TALK', AppRoutes.HOME),
               ],
             ),
             const Spacer(),

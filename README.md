@@ -1,6 +1,6 @@
 # journey
 
-A new Flutter project.
+Turning bold ideas into beautifully built products
 
 ## Getting Started
 

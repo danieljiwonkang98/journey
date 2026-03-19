@@ -36,39 +36,39 @@ class OverBigGuys extends StatelessWidget {
               width: double.infinity,
             ),
           ),
-          const SizedBox(height: 140),
-
-          Text(
-            'Value-Based Pricing Tiers',
-            textAlign: TextAlign.center,
-            style: GoogleFonts.museoModerno(
-              fontSize: 64,
-              fontWeight: FontWeight.w600,
-              color: AppColors.black,
-              height: 1.4,
-            ),
-          ),
-          const SizedBox(height: 56),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                'assets/images/home/section5/valuebased1.png',
-                width: MediaQuery.of(context).size.width * 0.27,
-              ),
-              const SizedBox(width: 8),
-              Image.asset(
-                'assets/images/home/section5/valuebased2.png',
-                width: MediaQuery.of(context).size.width * 0.27,
-              ),
-              const SizedBox(width: 8),
-              Image.asset(
-                'assets/images/home/section5/valuebased3.png',
-                width: MediaQuery.of(context).size.width * 0.27,
-              ),
-            ],
-          ),
           const SizedBox(height: 120),
+
+          // Text(
+          //   'Value-Based Pricing Tiers',
+          //   textAlign: TextAlign.center,
+          //   style: GoogleFonts.museoModerno(
+          //     fontSize: 64,
+          //     fontWeight: FontWeight.w600,
+          //     color: AppColors.black,
+          //     height: 1.4,
+          //   ),
+          // ),
+          // const SizedBox(height: 56),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.center,
+          //   children: [
+          //     Image.asset(
+          //       'assets/images/home/section5/valuebased1.png',
+          //       width: MediaQuery.of(context).size.width * 0.27,
+          //     ),
+          //     const SizedBox(width: 8),
+          //     Image.asset(
+          //       'assets/images/home/section5/valuebased2.png',
+          //       width: MediaQuery.of(context).size.width * 0.27,
+          //     ),
+          //     const SizedBox(width: 8),
+          //     Image.asset(
+          //       'assets/images/home/section5/valuebased3.png',
+          //       width: MediaQuery.of(context).size.width * 0.27,
+          //     ),
+          //   ],
+          // ),
+          // const SizedBox(height: 120),
         ],
       ),
     );

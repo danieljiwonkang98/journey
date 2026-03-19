@@ -4,9 +4,23 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:journey/core/themes/colors.dart';
 import 'package:get/get.dart';
 import 'package:journey/core/routes/app_routes.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class ChatAboutWidget extends StatelessWidget {
+class ChatAboutWidget extends StatefulWidget {
   const ChatAboutWidget({super.key});
+
+  @override
+  State<ChatAboutWidget> createState() => _ChatAboutWidgetState();
+}
+
+class _ChatAboutWidgetState extends State<ChatAboutWidget> {
+  final _messageController = TextEditingController();
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +87,7 @@ class ChatAboutWidget extends StatelessWidget {
             child: Stack(
               children: [
                 TextField(
+                  controller: _messageController,
                   maxLines: null,
                   expands: true,
                   textAlignVertical: TextAlignVertical.top,
@@ -92,10 +107,23 @@ class ChatAboutWidget extends StatelessWidget {
                 Positioned(
                   right: 16,
                   bottom: 16,
-                  child: SvgPicture.asset(
-                    'assets/images/send_button.svg',
-                    width: 40,
-                    height: 40,
+                  child: GestureDetector(
+                    onTap: () {
+                      final body = Uri.encodeComponent(_messageController.text);
+                      launchUrl(
+                        Uri.parse(
+                          'mailto:daniel@startjourney.today?subject=48-Hour Prototype Request&body=$body',
+                        ),
+                      );
+                    },
+                    child: MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: SvgPicture.asset(
+                        'assets/images/send_button.svg',
+                        width: 40,
+                        height: 40,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -117,34 +145,20 @@ class ChatAboutWidget extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              TextButton(
-                onPressed: () => Get.toNamed(AppRoutes.HOW_WE_WORK),
-                child: Text(
-                  'How We Work',
-                  style: GoogleFonts.museoModerno(
-                    color: const Color(0xFF454545),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    height: 1.5,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(width: 32),
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                  'Who We Are',
-                  style: GoogleFonts.museoModerno(
-                    color: const Color(0xFF454545),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    height: 1.5,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(width: 32),
+              // const SizedBox(width: 32),
+              // TextButton(
+              //   onPressed: () {},
+              //   child: Text(
+              //     'Who We Are',
+              //     style: GoogleFonts.museoModerno(
+              //       color: const Color(0xFF454545),
+              //       fontSize: 16,
+              //       fontWeight: FontWeight.w600,
+              //       height: 1.5,
+              //     ),
+              //     textAlign: TextAlign.center,
+              //   ),
+              // ),
               TextButton(
                 onPressed: () => Get.toNamed(AppRoutes.WORKS),
                 child: Text(
@@ -160,9 +174,9 @@ class ChatAboutWidget extends StatelessWidget {
               ),
               const SizedBox(width: 32),
               TextButton(
-                onPressed: () {},
+                onPressed: () => Get.toNamed(AppRoutes.HOW_WE_WORK),
                 child: Text(
-                  'Pricing',
+                  'How We Work',
                   style: GoogleFonts.museoModerno(
                     color: const Color(0xFF454545),
                     fontSize: 16,
@@ -172,6 +186,21 @@ class ChatAboutWidget extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
+              // const SizedBox(width: 32),
+
+              // TextButton(
+              //   onPressed: () {},
+              //   child: Text(
+              //     'Pricing',
+              //     style: GoogleFonts.museoModerno(
+              //       color: const Color(0xFF454545),
+              //       fontSize: 16,
+              //       fontWeight: FontWeight.w600,
+              //       height: 1.5,
+              //     ),
+              //     textAlign: TextAlign.center,
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -199,7 +228,7 @@ class ChatAboutWidget extends StatelessWidget {
                 color: const Color(0xFFE6E6E6),
               ),
               Text(
-                'design@startjourney.today',
+                'daniel@startjourney.today',
                 style: GoogleFonts.poppins(
                   color: const Color(0xFFB3B3B3),
                   fontSize: 14,

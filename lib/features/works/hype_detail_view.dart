@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:journey/core/widgets/chat_about_widget.dart';
 import 'package:journey/core/widgets/core_app_bar.dart';
@@ -281,7 +280,7 @@ class HypeDetailView extends StatelessWidget {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () {
-                    launchUrl(Uri.parse('https://hypeapp.us/'));
+                    launchUrl(Uri.parse('https://hypeus.framer.website/'));
                   },
                   child: Image.asset(
                     'assets/images/works/kindletters/visit_site_button.png',
