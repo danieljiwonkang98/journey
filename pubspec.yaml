@@ -71,6 +71,7 @@ flutter:
   assets:
     - assets/images/
     - assets/images/home/
+    - assets/images/home/flower.gif
     - assets/images/home/section2/
     - assets/images/home/section3/
     - assets/images/home/section4/
