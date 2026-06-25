@@ -28,8 +28,7 @@ class MyApp extends StatelessWidget {
             ? mediaSize.width
             : viewport.physicalSize.width / viewport.devicePixelRatio;
         final isPhonePortrait =
-            orientation == Orientation.portrait &&
-            mediaSize.shortestSide < 600;
+            orientation == Orientation.portrait && mediaSize.shortestSide < 600;
 
         debugPrint(
           '[GlobalLayoutGate] '

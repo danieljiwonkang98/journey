@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class HomeMainSection extends StatelessWidget {
-  const HomeMainSection({super.key});
+  const HomeMainSection({super.key, required this.sectionHeight});
+
+  final double sectionHeight;
 
   TextStyle get _narrativeStyle => GoogleFonts.urbanist(
         color: Colors.white,
@@ -24,10 +26,10 @@ class HomeMainSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final width = MediaQuery.sizeOf(context).width;
 
     return SizedBox(
-      height: size.height,
+      height: sectionHeight,
       width: double.infinity,
       child: ColoredBox(
         color: Colors.black,
@@ -35,7 +37,7 @@ class HomeMainSection extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 48),
           child: Column(
             children: [
-              SizedBox(height: size.height * 0.1),
+              SizedBox(height: sectionHeight * 0.1),
               RichText(
                 textAlign: TextAlign.center,
                 text: TextSpan(
@@ -96,10 +98,10 @@ class HomeMainSection extends StatelessWidget {
               const SizedBox(height: 12),
               Image.asset(
                 'assets/images/journey/JourneyWhiteLogo.png',
-                width: size.width * 0.55,
+                width: width * 0.55,
                 fit: BoxFit.contain,
               ),
-              SizedBox(height: size.height * 0.08),
+              SizedBox(height: sectionHeight * 0.08),
             ],
           ),
         ),
