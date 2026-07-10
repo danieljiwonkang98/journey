@@ -1,0 +1,641 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dot Walkers v2 — 유리 바닥, 신발 실루엣</title>
+    <style>
+      :root {
+        --line: #1c1c1c;
+        --dim: #777;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        background: #000;
+        color: #eee;
+        font-family:
+          "Helvetica Neue", Helvetica, "Apple SD Gothic Neo", sans-serif;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+        width: 100vw;
+        height: 100vh;
+      }
+      .hud {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        background: rgba(0, 0, 0, 0.75);
+        border: 1px solid var(--line);
+        padding: 12px 16px;
+        backdrop-filter: blur(8px);
+        font-size: 12px;
+        user-select: none;
+      }
+      body.inv .hud {
+        background: rgba(255, 255, 255, 0.8);
+        border-color: #ddd;
+        color: #111;
+      }
+      body.inv .hud label {
+        color: #555;
+      }
+      .hud label {
+        color: var(--dim);
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+      .hud input[type="range"] {
+        width: 84px;
+        accent-color: currentColor;
+        height: 2px;
+      }
+      .hud button {
+        background: #fff;
+        color: #000;
+        border: 0;
+        padding: 8px 16px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      body.inv .hud button {
+        background: #111;
+        color: #fff;
+      }
+      .hud button.rec {
+        background: #e33 !important;
+        color: #fff !important;
+      }
+      .tag {
+        position: fixed;
+        left: 20px;
+        top: 20px;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+        color: var(--dim);
+        text-transform: uppercase;
+      }
+      .timer {
+        color: #e33;
+        font-variant-numeric: tabular-nums;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="c"></canvas>
+    <div class="tag">DOT WALKERS · VIEW FROM BELOW</div>
+    <div class="hud">
+      <label
+        >인원 <input id="count" type="range" min="1" max="14" value="6"
+      /></label>
+      <label
+        >속도 <input id="speed" type="range" min="20" max="160" value="70"
+      /></label>
+      <label
+        >체격 <input id="size" type="range" min="60" max="160" value="100"
+      /></label>
+      <label
+        >도트 간격 <input id="gap" type="range" min="6" max="20" value="11"
+      /></label>
+      <label><input id="invert" type="checkbox" /> 밝은 배경</label>
+      <button id="recBtn">● 녹화 (WebM)</button>
+      <span class="timer" id="timer">00:00</span>
+    </div>
+
+    <script>
+      const canvas = document.getElementById("c");
+      const ctx = canvas.getContext("2d");
+      let W, H, DPR;
+
+      // 저해상도 오프스크린: 도트 1개 = 픽셀 1개로 실루엣을 그린 뒤 샘플링
+      // 디테일을 위해 SS배 해상도로 그리고 다운샘플한다
+      const SS = 2;
+      const field = document.createElement("canvas");
+      const fctx = field.getContext("2d");
+      const fieldLo = document.createElement("canvas");
+      const loctx = fieldLo.getContext("2d", { willReadFrequently: true });
+      let cols, rows;
+
+      function resize() {
+        DPR = Math.min(window.devicePixelRatio || 1, 2);
+        W = canvas.width = innerWidth * DPR;
+        H = canvas.height = innerHeight * DPR;
+        canvas.style.width = innerWidth + "px";
+        canvas.style.height = innerHeight + "px";
+        rebuildField();
+      }
+      function rebuildField() {
+        cols = Math.ceil(W / (params.gap * DPR)) + 1;
+        rows = Math.ceil(H / (params.gap * DPR)) + 1;
+        field.width = cols * SS;
+        field.height = rows * SS;
+        fieldLo.width = cols;
+        fieldLo.height = rows;
+        loctx.imageSmoothingEnabled = true;
+      }
+      const params = { count: 6, speed: 70, size: 1.0, gap: 11, invert: false };
+      addEventListener("resize", resize);
+
+      // 커서 위치 (device px). 화면 밖이면 null → 회피 안 함
+      let mouse = null;
+      addEventListener("pointermove", (e) => {
+        mouse = { x: e.clientX * DPR, y: e.clientY * DPR };
+      });
+      addEventListener("pointerleave", () => {
+        mouse = null;
+      });
+      addEventListener("blur", () => {
+        mouse = null;
+      });
+
+      document.getElementById("count").oninput = (e) =>
+        setCount(+e.target.value);
+      document.getElementById("speed").oninput = (e) =>
+        (params.speed = +e.target.value);
+      document.getElementById("size").oninput = (e) =>
+        (params.size = +e.target.value / 100);
+      document.getElementById("gap").oninput = (e) => {
+        params.gap = +e.target.value;
+        rebuildField();
+      };
+      document.getElementById("invert").onchange = (e) => {
+        params.invert = e.target.checked;
+        document.body.classList.toggle("inv", params.invert);
+      };
+
+      // ---------- 보행자 ----------
+      // 몸통은 계속 전진하고, 발은 실제 걸음처럼 동작한다:
+      // 접지한 발은 유리 위 그 자리에 고정, 스윙하는 발만 앞으로 이동.
+      // 접지 = 또렷한 신발 밑창, 스윙 = 유리에서 멀어져 크고 흐리게.
+      function rnd(a, b) {
+        return a + Math.random() * (b - a);
+      }
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+
+      class Walker {
+        constructor() {
+          this.spawn(true);
+        }
+        spawn(inside) {
+          const m = 140 * DPR;
+          if (inside) {
+            this.x = rnd(m, W - m);
+            this.y = rnd(m, H - m);
+            this.dir = rnd(0, Math.PI * 2);
+          } else {
+            const side = Math.floor(rnd(0, 4));
+            if (side === 0) {
+              this.x = -m;
+              this.y = rnd(0, H);
+            }
+            if (side === 1) {
+              this.x = W + m;
+              this.y = rnd(0, H);
+            }
+            if (side === 2) {
+              this.x = rnd(0, W);
+              this.y = -m;
+            }
+            if (side === 3) {
+              this.x = rnd(0, W);
+              this.y = H + m;
+            }
+            this.dir =
+              Math.atan2(H / 2 - this.y, W / 2 - this.x) + rnd(-0.5, 0.5);
+          }
+          // 포인트 컬러(#53AAFF): 동시에 최대 2명까지, 스폰될 때 확률로 결정
+          const accents = walkers.filter((o) => o !== this && o.accent).length;
+          this.accent = accents < 2 && Math.random() < 0.3;
+          this.body = rnd(0.85, 1.25); // 개인별 체격 편차
+          this.stepT = rnd(0.5, 0.62); // 한 걸음 시간(초)
+          this.turn = 0;
+          this.pause = 0;
+          this.nextPause = rnd(4, 12);
+          this.clock = rnd(0, 1); // 걸음 사이클 위상
+          this.swingIdx = 0; // 지금 스윙 중인 발
+
+          // 두 발 초기 배치
+          this.feet = [0, 1].map((i) => {
+            const p = this.footTarget(i, 0);
+            return {
+              x: p.x,
+              y: p.y,
+              sx: p.x,
+              sy: p.y,
+              tx: p.x,
+              ty: p.y,
+              lift: 0,
+              ang: this.dir,
+            };
+          });
+        }
+        scale() {
+          return params.size * this.body * DPR;
+        }
+        footTarget(i, lead) {
+          const s = this.scale();
+          const side = (i === 0 ? -1 : 1) * 9 * s;
+          const cos = Math.cos(this.dir),
+            sin = Math.sin(this.dir);
+          return {
+            x: this.x + cos * lead - sin * side,
+            y: this.y + sin * lead + cos * side,
+          };
+        }
+        step(dt) {
+          this.nextPause -= dt;
+          if (this.nextPause < 0 && this.pause <= 0) {
+            this.pause = rnd(0.7, 2.4);
+            this.nextPause = rnd(5, 14);
+          }
+
+          // 커서 근처면 멈추지 않고 도망
+          let fleeing = false;
+          let fleeBoost = 1;
+          if (mouse) {
+            const dx = this.x - mouse.x,
+              dy = this.y - mouse.y;
+            const dist = Math.hypot(dx, dy);
+            const radius = 220 * DPR;
+            if (dist < radius && dist > 1) {
+              fleeing = true;
+              this.pause = 0; // 멈춰 있어도 바로 걷기 재개
+              // 커서에서 멀어지는 방향으로 조향 (가까울수록 강하게)
+              const strength = 1 - dist / radius;
+              const away = Math.atan2(dy, dx);
+              let diff = away - this.dir;
+              while (diff > Math.PI) diff -= Math.PI * 2;
+              while (diff < -Math.PI) diff += Math.PI * 2;
+              this.dir += diff * Math.min(1, strength * 8 * dt);
+              fleeBoost = 1 + strength * 1.4;
+            }
+          }
+
+          const walking = this.pause <= 0;
+          if (!walking) this.pause -= dt;
+
+          this.turn += rnd(-1.2, 1.2) * dt;
+          this.turn *= 0.92;
+          if (walking && !fleeing) this.dir += this.turn * dt * 2;
+
+          const v = walking
+            ? ((params.speed * this.scale()) / DPR) * DPR * 0.9 * fleeBoost
+            : 0;
+          this.x += Math.cos(this.dir) * v * dt;
+          this.y += Math.sin(this.dir) * v * dt;
+
+          // 걸음 사이클
+          if (walking) {
+            this.clock += dt / this.stepT;
+            if (this.clock >= 1) {
+              this.clock -= 1;
+              this.swingIdx = 1 - this.swingIdx; // 발 교대
+              const f = this.feet[this.swingIdx];
+              f.sx = f.x;
+              f.sy = f.y; // 스윙 시작점
+            }
+            const f = this.feet[this.swingIdx];
+            const t = this.clock;
+            // 착지 목표: 몸이 반 걸음 더 갔을 때 기준으로 앞쪽
+            const lead = 15 * this.scale() + v * this.stepT * 0.5;
+            const tgt = this.footTarget(this.swingIdx, lead);
+            const e = t * t * (3 - 2 * t); // ease
+            f.x = lerp(f.sx, tgt.x, e);
+            f.y = lerp(f.sy, tgt.y, e);
+            f.lift = Math.sin(Math.PI * t); // 0=접지, 1=최고점
+            f.ang = this.dir;
+            this.feet[1 - this.swingIdx].lift = 0; // 반대발은 접지
+          } else {
+            // 멈춰 있을 때: 두 발 모두 접지, 몸만 미세하게 흔들림
+            this.feet[0].lift = this.feet[1].lift = 0;
+          }
+
+          const m = 180 * DPR;
+          if (this.x < -m || this.x > W + m || this.y < -m || this.y > H + m)
+            this.spawn(false);
+        }
+      }
+
+      let walkers = [];
+      function setCount(n) {
+        params.count = n;
+        while (walkers.length < n) walkers.push(new Walker());
+        walkers.length = n;
+      }
+
+      // ---------- 실루엣 필드 그리기 ----------
+      // 오프스크린(도트 해상도)에 흰 실루엣을 그린다. 블러 px는 오프스크린 스케일 기준.
+      function drawShoe(g, x, y, ang, s, lift, sf, col) {
+        // lift 0(접지): 또렷하고 진함 / lift 1(공중): 크고 흐리고 연함
+        const blur = lift * 2.6 * SS;
+        const grow = 1 + lift * 0.55;
+        const alpha = 1 - lift * 0.5;
+        const L = 26 * s * sf * grow; // 신발 길이
+        const Wd = 10 * s * sf * grow; // 신발 폭
+
+        g.save();
+        g.translate(x * sf, y * sf);
+        g.rotate(ang);
+        g.filter = blur > 0.15 ? `blur(${blur.toFixed(2)}px)` : "none";
+        g.globalAlpha = alpha;
+        g.fillStyle = col;
+        // 앞창(큰 타원) + 뒷굽(작은 원), 사이에 살짝 간격 — 아래에서 본 밑창
+        g.beginPath();
+        g.ellipse(L * 0.18, 0, L * 0.36, Wd * 0.5, 0, 0, 6.2832);
+        g.fill();
+        g.beginPath();
+        g.ellipse(-L * 0.33, 0, Wd * 0.4, Wd * 0.44, 0, 0, 6.2832);
+        g.fill();
+        g.restore();
+      }
+      // 캡슐(둥근 끝 굵은 선) — 다리·팔 용
+      function capsule(g, x1, y1, x2, y2, w, blur, alpha, col) {
+        const b = blur * SS;
+        g.filter = b > 0.15 ? `blur(${b.toFixed(2)}px)` : "none";
+        g.globalAlpha = alpha;
+        g.strokeStyle = col;
+        g.lineCap = "round";
+        g.lineWidth = Math.max(w, 0.6);
+        g.beginPath();
+        g.moveTo(x1, y1);
+        g.lineTo(x2, y2);
+        g.stroke();
+      }
+      // 아래에서 올려다본 사람 전체: 유리에서 멀어질수록 흐리고 연해진다.
+      // 그리는 순서 = 깊이 순서: 머리(가장 멀리) → 몸통·팔 → 허벅지 → 종아리, 신발은 별도로 맨 위에.
+      function drawFigure(g, w, sf, col) {
+        const s = w.scale();
+        const u = s * sf; // 모델 px → 필드 px
+        const cos = Math.cos(w.dir),
+          sin = Math.sin(w.dir);
+        const sway = Math.sin((w.swingIdx + w.clock) * Math.PI) * 2.2 * s;
+        const bx = (w.x - sin * sway) * sf;
+        const by = (w.y + cos * sway) * sf;
+
+        g.save();
+        g.fillStyle = col;
+
+        // 머리: 가장 멀리 → 가장 흐리고 연하게
+        g.filter = `blur(${5 * SS}px)`;
+        g.globalAlpha = 0.3;
+        g.beginPath();
+        g.ellipse(bx, by, 8 * u, 8 * u, 0, 0, 6.2832);
+        g.fill();
+
+        // 어깨·몸통: 진행 방향에 수직으로 넓은 타원
+        g.save();
+        g.translate(bx, by);
+        g.rotate(w.dir);
+        g.filter = `blur(${3.6 * SS}px)`;
+        g.globalAlpha = 0.42;
+        g.beginPath();
+        g.ellipse(0, 0, 12 * u, 21 * u, 0, 0, 6.2832);
+        g.fill();
+        g.restore();
+
+        // 팔: 같은 쪽 다리와 반대로 스윙, 어깨 높이라 많이 흐림
+        for (let i = 0; i < 2; i++) {
+          const f = w.feet[i];
+          // 발이 몸 기준 얼마나 앞에 있는지 → 팔은 그 반대로
+          const lead = ((f.x - w.x) * cos + (f.y - w.y) * sin) / (18 * s);
+          const swing = Math.max(-1, Math.min(1, -lead));
+          const side = (i === 0 ? -1 : 1) * 15 * s;
+          const shx = (w.x - sin * side) * sf,
+            shy = (w.y + cos * side) * sf;
+          const hx = (w.x - sin * side * 1.15 + cos * swing * 20 * s) * sf;
+          const hy = (w.y + cos * side * 1.15 + sin * swing * 20 * s) * sf;
+          capsule(g, shx, shy, hx, hy, 6 * u, 3.2, 0.34, col);
+        }
+
+        // 골반: 몸통보다 조금 낮아서 덜 흐림
+        g.save();
+        g.translate(bx, by);
+        g.rotate(w.dir);
+        g.filter = `blur(${2.8 * SS}px)`;
+        g.globalAlpha = 0.45;
+        g.beginPath();
+        g.ellipse(0, 0, 9 * u, 13 * u, 0, 0, 6.2832);
+        g.fill();
+        g.restore();
+
+        // 다리: 발 → 무릎 → 골반, 아래 구간일수록 또렷하게
+        for (let i = 0; i < 2; i++) {
+          const f = w.feet[i];
+          const side = (i === 0 ? -1 : 1) * 6 * s;
+          const hipx = (w.x - sin * side) * sf,
+            hipy = (w.y + cos * side) * sf;
+          const fx = (f.x - Math.cos(f.ang) * 8 * s) * sf; // 발목은 신발 뒤쪽
+          const fy = (f.y - Math.sin(f.ang) * 8 * s) * sf;
+          // 무릎: 중간점에서 진행 방향으로 살짝, 스윙 중엔 더 굽힘
+          const bend = (4 + f.lift * 8) * s;
+          const kx = (fx + hipx) / 2 + Math.cos(w.dir) * bend * sf;
+          const ky = (fy + hipy) / 2 + Math.sin(w.dir) * bend * sf;
+          const liftBlur = f.lift * 1.4;
+          capsule(
+            g,
+            kx,
+            ky,
+            hipx,
+            hipy,
+            7 * u,
+            2.4 + liftBlur * 0.5,
+            0.42,
+            col,
+          ); // 허벅지
+          capsule(
+            g,
+            fx,
+            fy,
+            kx,
+            ky,
+            5.5 * u,
+            1.2 + liftBlur,
+            0.55 - f.lift * 0.15,
+            col,
+          ); // 종아리
+        }
+
+        g.restore();
+        g.filter = "none";
+        g.globalAlpha = 1;
+      }
+
+      // ---------- 메인 루프 ----------
+      let last = performance.now();
+      function frame(now) {
+        const dt = Math.min((now - last) / 1000, 0.05);
+        last = now;
+
+        for (const w of walkers) w.step(dt);
+
+        // 1) 실루엣 필드
+        const sf = SS / (params.gap * DPR); // device px → field px (SS배 슈퍼샘플)
+        fctx.filter = "none";
+        fctx.globalAlpha = 1;
+        fctx.globalCompositeOperation = "source-over";
+        fctx.fillStyle = "#000";
+        fctx.fillRect(0, 0, cols * SS, rows * SS);
+        // 일반 보행자는 R 채널, 포인트 컬러 보행자는 G 채널에 그려서
+        // 도트 단계에서 두 밝기를 섞는다 (겹침은 가산)
+        fctx.globalCompositeOperation = "lighter";
+        for (const w of walkers) {
+          const col = w.accent ? "#00ff00" : "#ff0000";
+          drawFigure(fctx, w, sf, col);
+          for (const f of w.feet)
+            drawShoe(fctx, f.x, f.y, f.ang, w.scale(), f.lift, sf, col);
+        }
+        fctx.globalCompositeOperation = "source-over";
+
+        // 다운샘플 → 도트 해상도
+        loctx.drawImage(field, 0, 0, cols, rows);
+        const img = loctx.getImageData(0, 0, cols, rows).data;
+
+        // 2) 하프톤 도트 렌더
+        const inv = params.invert;
+        ctx.fillStyle = inv ? "#f4f4f4" : "#000";
+        ctx.fillRect(0, 0, W, H);
+
+        const gap = params.gap * DPR;
+        const maxR = gap * 0.47;
+        const ambient = 0.05;
+
+        // 베이스색 ↔ #53AAFF 보간 팔레트 (11단계)
+        const base = inv ? [10, 10, 10] : [255, 255, 255];
+        const AC = [0x53, 0xaa, 0xff];
+        const pal = [];
+        for (let k = 0; k <= 10; k++) {
+          const t = k / 10;
+          pal.push(
+            `rgb(${Math.round(base[0] + (AC[0] - base[0]) * t)},${Math.round(base[1] + (AC[1] - base[1]) * t)},${Math.round(base[2] + (AC[2] - base[2]) * t)})`,
+          );
+        }
+
+        for (let j = 0; j < rows; j++) {
+          const y = j * gap;
+          for (let i = 0; i < cols; i++) {
+            const idx = (j * cols + i) * 4;
+            const nB = img[idx] / 255; // 일반(R)
+            const aB = img[idx + 1] / 255; // 포인트(G)
+            let b = nB + aB + ambient;
+            if (b > 1) b = 1;
+            const r = maxR * Math.pow(b, 0.6);
+            if (r < 0.35) continue;
+            // 포인트 밝기 비중만큼 #53AAFF 쪽으로
+            const t = aB > 0.003 ? aB / (nB + aB) : 0;
+            ctx.fillStyle = pal[Math.round(t * 10)];
+            ctx.globalAlpha = Math.min(0.22 + b, 1);
+            ctx.beginPath();
+            ctx.arc(i * gap, y, r, 0, 6.2832);
+            ctx.fill();
+          }
+        }
+        ctx.globalAlpha = 1;
+        requestAnimationFrame(frame);
+      }
+
+      resize();
+      setCount(params.count);
+      requestAnimationFrame(frame);
+
+      // ---------- 녹화 ----------
+      const recBtn = document.getElementById("recBtn");
+      const timerEl = document.getElementById("timer");
+      let recorder = null,
+        chunks = [],
+        t0 = 0,
+        tick = null;
+      recBtn.onclick = () => {
+        if (recorder) {
+          recorder.stop();
+          return;
+        }
+        const stream = canvas.captureStream(60);
+        const mime = MediaRecorder.isTypeSupported("video/webm;codecs=vp9")
+          ? "video/webm;codecs=vp9"
+          : "video/webm";
+        recorder = new MediaRecorder(stream, {
+          mimeType: mime,
+          videoBitsPerSecond: 12_000_000,
+        });
+        chunks = [];
+        recorder.ondataavailable = (e) => e.data.size && chunks.push(e.data);
+        recorder.onstop = async () => {
+          const blob = new Blob(chunks, { type: "video/webm" });
+          recorder = null;
+          recBtn.textContent = "● 녹화 (WebM)";
+          recBtn.classList.remove("rec");
+          timerEl.style.display = "none";
+          clearInterval(tick);
+
+          // 1순위: 파일 저장 대화상자 (Chrome/Edge)
+          if (window.showSaveFilePicker) {
+            try {
+              const handle = await showSaveFilePicker({
+                suggestedName: "dot-walkers.webm",
+                types: [
+                  {
+                    description: "WebM video",
+                    accept: { "video/webm": [".webm"] },
+                  },
+                ],
+              });
+              const w = await handle.createWritable();
+              await w.write(blob);
+              await w.close();
+              return;
+            } catch (e) {
+              /* 취소하거나 샌드박스에서 막히면 아래로 */
+            }
+          }
+          // 2순위: 자동 다운로드 시도 + 눈에 보이는 저장 링크 (샌드박스 대비)
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = "dot-walkers.webm";
+          a.textContent = "↓ 영상 저장";
+          a.style.cssText =
+            "color:#e33;font-weight:600;text-decoration:underline";
+          const old = document.getElementById("dlLink");
+          if (old) old.remove();
+          a.id = "dlLink";
+          recBtn.after(a);
+          try {
+            a.click();
+          } catch (e) {}
+        };
+        recorder.start();
+        t0 = Date.now();
+        recBtn.textContent = "■ 정지 & 저장";
+        recBtn.classList.add("rec");
+        timerEl.style.display = "inline";
+        tick = setInterval(() => {
+          const sec = Math.floor((Date.now() - t0) / 1000);
+          timerEl.textContent =
+            String(Math.floor(sec / 60)).padStart(2, "0") +
+            ":" +
+            String(sec % 60).padStart(2, "0");
+        }, 250);
+      };
+    </script>
+  </body>
+</html>

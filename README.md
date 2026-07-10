@@ -1,16 +1,30 @@
-# journey
+# Journey
 
-Turning bold ideas into beautifully built products
+Turning bold ideas into beautifully built products.
 
-## Getting Started
+Agency website built with Next.js, React, and TypeScript.
 
-This project is a starting point for a Flutter application.
+## Getting started
 
-A few resources to get you started if this is your first Flutter project:
+```bash
+npm install
+npm run dev
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Open [http://localhost:3000](http://localhost:3000).
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Scripts
+
+- `npm run dev` — start the development server
+- `npm run build` — create a static export in `out/`
+- `npm run start` — serve the production build (non-static)
+- `npm run lint` — run ESLint
+
+## Deploy (Firebase Hosting)
+
+```bash
+npm run build
+firebase deploy --only hosting
+```
+
+Static files are exported to `out/` for Firebase Hosting.

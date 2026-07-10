@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+:root {
+  --background: #000000;
+  --foreground: #ffffff;
+
+  /* Journey brand colors */
+  --journey-yellow: #f4e654;
+  --journey-blue: #2d91f3;
+  --journey-green: #2ce798;
+  --journey-purple: #a66bfb;
+  --journey-red: #e2838c;
+  --journey-black: #2c2c2c;
+  --journey-gray: #f1f2f4;
+  --journey-text-neutral: #454545;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-journey-yellow: var(--journey-yellow);
+  --color-journey-blue: var(--journey-blue);
+  --color-journey-green: var(--journey-green);
+  --color-journey-purple: var(--journey-purple);
+  --color-journey-red: var(--journey-red);
+  --color-journey-black: var(--journey-black);
+  --color-journey-gray: var(--journey-gray);
+  --color-journey-text-neutral: var(--journey-text-neutral);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Figma Glass: Light -45°/20%, Refraction 59, Depth 39, Dispersion 28, Frost 12, Splay 28 */
+.glass-nav {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border-radius: 48px;
+  /* Dark underlay keeps fill even; white 20% tint matches Figma without left hotspots */
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.2)),
+    rgba(0, 0, 0, 0.72);
+  -webkit-backdrop-filter: blur(12px) saturate(1.59);
+  backdrop-filter: blur(12px) saturate(1.59);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.39),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.glass-nav > * {
+  position: relative;
+  z-index: 1;
+}
