@@ -104,8 +104,8 @@ export default function FooterSection() {
                 alt="o"
                 width={25}
                 height={24}
-                className="-ml-[0.02em] mr-[0.02em] inline-block h-[calc(1ex+0.04em)] w-[calc(1ex+0.04em)] align-baseline"
-                style={{ filter: WHITE_FILTER, verticalAlign: "-0.05em" }}
+                className="ml-[0.04em] mr-[0.02em] inline-block h-[calc(1ex+0.02em)] w-[calc(1ex+0.02em)] align-baseline"
+                style={{ filter: WHITE_FILTER }}
               />
               {" what's your journey?"}
             </h2>
