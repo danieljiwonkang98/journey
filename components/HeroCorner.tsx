@@ -2,14 +2,30 @@
 
 import { useEffect, useEffectEvent, useState } from "react";
 
-function formatGmtPlus2Time(date: Date) {
-  const utc = date.getTime() + date.getTimezoneOffset() * 60_000;
-  const gmt2 = new Date(utc + 2 * 3_600_000);
-  const hours = gmt2.getHours();
-  const minutes = gmt2.getMinutes();
-  const period = hours < 12 ? "오전" : "오후";
-  const h12 = hours % 12 || 12;
-  return `${h12}:${String(minutes).padStart(2, "0")} ${period} (GMT+2)`;
+const SEOUL_TZ = "Asia/Seoul";
+
+function formatSeoulHeroTime(date: Date) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: SEOUL_TZ,
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).formatToParts(date);
+
+  const hour = parts.find((part) => part.type === "hour")?.value ?? "12";
+  const minute = parts.find((part) => part.type === "minute")?.value ?? "00";
+  const dayPeriod = parts.find((part) => part.type === "dayPeriod")?.value;
+  const period = dayPeriod === "AM" ? "오전" : "오후";
+
+  const gmt =
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: SEOUL_TZ,
+      timeZoneName: "shortOffset",
+    })
+      .formatToParts(date)
+      .find((part) => part.type === "timeZoneName")?.value ?? "GMT+9";
+
+  return `${hour}:${minute} ${period} (${gmt})`;
 }
 
 export default function HeroCorner() {
@@ -22,10 +38,10 @@ export default function HeroCorner() {
   });
 
   useEffect(() => {
-    const update = () => setTime(formatGmtPlus2Time(new Date()));
+    const update = () => setTime(formatSeoulHeroTime(new Date()));
     update();
-    const id = setInterval(update, 30_000);
-    return () => clearInterval(id);
+    const id = window.setInterval(update, 30_000);
+    return () => window.clearInterval(id);
   }, []);
 
   useEffect(() => {
@@ -48,11 +64,8 @@ export default function HeroCorner() {
     >
       <div className="type-meta flex flex-col items-end gap-0.5 text-white">
         <span>{time}</span>
-        <a
-          href="mailto:hello@startjourney.today"
-          className="hover:underline"
-        >
-          hello@startjourney.today
+        <a href="mailto:daniel@startjourney.today" className="hover:underline">
+          daniel@startjourney.today
         </a>
       </div>
 

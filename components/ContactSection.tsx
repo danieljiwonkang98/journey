@@ -49,7 +49,7 @@ export default function ContactSection() {
           </p>
 
           <Link
-            href="mailto:hello@startjourney.today"
+            href="mailto:daniel@startjourney.today"
             className="type-contact-cta inline-flex items-center gap-2 text-black"
             style={{ marginTop: "var(--space-contact-cta-gap)" }}
           >

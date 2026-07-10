@@ -1,6 +1,7 @@
 import ContactSection from "@/components/ContactSection";
 import CraftManifestoSection from "@/components/CraftManifestoSection";
 import DotWalkers from "@/components/DotWalkers";
+import FooterSection from "@/components/FooterSection";
 import FounderPhotoSection from "@/components/FounderPhotoSection";
 import HeroCorner from "@/components/HeroCorner";
 import HeroNav from "@/components/HeroNav";
@@ -57,6 +58,9 @@ export default function Home() {
 
       {/* Contact — bright DotWalkers + CTA */}
       <ContactSection />
+
+      {/* Footer — status, links, wordmark */}
+      <FooterSection />
     </main>
   );
 }
