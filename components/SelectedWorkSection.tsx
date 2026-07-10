@@ -35,6 +35,22 @@ const WORKS: readonly Work[] = [
     image: "/images/card_preview/mirai_card.png",
     tags: ["UX Design", "Habit Design", "Product Design"],
   },
+  {
+    id: "interviewshield",
+    title: "InterviewShield",
+    subtitle: "Security",
+    href: "https://startjourney.today/#/works/interviewshield",
+    image: "/images/card_preview/interviewshield_card.png",
+    tags: ["Desktop App", "AI", "Security UX"],
+  },
+  {
+    id: "razorcode",
+    title: "RazorCode",
+    subtitle: "Developer Tools",
+    href: "https://startjourney.today/#/works/razorcode",
+    image: "/images/card_preview/RazorCode_card.png",
+    tags: ["AI Tool", "Developer Experience", "Productivity"],
+  },
 ] as const;
 
 function WorkCard({ work }: { work: Work }) {

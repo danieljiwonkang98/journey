@@ -40,12 +40,20 @@
   --text-card-tag: clamp(13px, calc(100vw * 16 / 1920), 16px);
   --text-card-title: clamp(28px, calc(100vw * 48 / 1920), 48px);
   --text-card-subtitle: clamp(15px, calc(100vw * 18 / 1920), 18px);
+  --text-craft-headline: clamp(
+    28px,
+    min(calc(100vw * 72 / 1920), calc(100dvh * 72 / 1080)),
+    72px
+  );
+  --text-craft-body: clamp(16px, calc(100vw * 24 / 1920), 24px);
 
   /* Selected work layout — Figma px at 1920 */
   --space-works-inset: clamp(24px, calc(100vw * 48 / 1920), 48px);
   --space-works-label-top: clamp(16px, calc(100vw * 24 / 1920), 24px);
   --space-works-headline-top: clamp(32px, calc(100vw * 60 / 1920), 60px);
   --space-works-cards-top: clamp(48px, calc(100vw * 120 / 1920), 120px);
+  --space-craft-label-gap: clamp(24px, calc(100vw * 40 / 1920), 40px);
+  --space-craft-headline-gap: clamp(32px, calc(100vw * 60 / 1920), 60px);
 
   --work-card-w: clamp(280px, calc(100vw * 700 / 1920), 700px);
   --work-card-h: clamp(356px, calc(100vw * 890 / 1920), 890px);
@@ -153,6 +161,28 @@ body {
   line-height: 100%;
   /* Figma 0.09px at 18px */
   letter-spacing: 0.005em;
+}
+
+.type-craft-headline {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-craft-headline);
+  font-style: normal;
+  font-weight: 500;
+  line-height: 105%;
+  text-align: center;
+  /* Figma -2px at 72px */
+  letter-spacing: -0.0278em;
+}
+
+.type-craft-body {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-craft-body);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
+  text-align: center;
+  /* Figma -0.5px at 24px */
+  letter-spacing: -0.0208em;
 }
 
 .work-card-tag {

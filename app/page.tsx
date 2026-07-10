@@ -1,9 +1,12 @@
+import CraftManifestoSection from "@/components/CraftManifestoSection";
 import DotWalkers from "@/components/DotWalkers";
 import HeroCorner from "@/components/HeroCorner";
 import HeroNav from "@/components/HeroNav";
+import HowWeWorkSection from "@/components/HowWeWorkSection";
 import JourneyWordmark from "@/components/JourneyWordmark";
 import ManifestoSection from "@/components/ManifestoSection";
 import SelectedWorkSection from "@/components/SelectedWorkSection";
+import WaveBarsTransition from "@/components/WaveBarsTransition";
 
 export default function Home() {
   return (
@@ -29,6 +32,15 @@ export default function Home() {
 
       {/* Selected work — solid black, no DotWalkers */}
       <SelectedWorkSection />
+
+      {/* Craft manifesto — split cheetah video + centered copy */}
+      <CraftManifestoSection />
+
+      {/* Black → white zipper wave (short transition) */}
+      <WaveBarsTransition />
+
+      {/* How we work — white, centered */}
+      <HowWeWorkSection />
     </main>
   );
 }
