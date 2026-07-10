@@ -46,6 +46,38 @@
     72px
   );
   --text-craft-body: clamp(16px, calc(100vw * 24 / 1920), 24px);
+  --text-service-item: clamp(
+    36px,
+    min(calc(100vw * 128 / 1920), calc(100dvh * 128 / 1080)),
+    128px
+  );
+  --text-service-index: clamp(14px, calc(100vw * 20 / 1920), 20px);
+  --text-service-caption: clamp(16px, calc(100vw * 22 / 1920), 22px);
+
+  /* Services section — Figma px at 1920 */
+  --service-image-w: clamp(280px, calc(100vw * 456 / 1920), 456px);
+  --service-image-h: clamp(197px, calc(100vw * 320 / 1920), 320px);
+  --space-service-item-gap: clamp(8px, calc(100vw * 16 / 1920), 16px);
+  --space-service-index-gap: clamp(8px, calc(100vw * 12 / 1920), 12px);
+  --space-service-caption-gap: clamp(12px, calc(100vw * 16 / 1920), 16px);
+  --space-service-inset-top: clamp(48px, calc(100vw * 120 / 1920), 120px);
+  --space-founder-photo-bottom: clamp(80px, calc(100vw * 200 / 1920), 200px);
+
+  /* Studio section — Figma px at 1920 */
+  --text-founder-name: clamp(32px, calc(100vw * 64 / 1920), 64px);
+  --text-founder-role: clamp(14px, calc(100vw * 18 / 1920), 18px);
+  --text-studio-body: clamp(16px, calc(100vw * 24 / 1920), 24px);
+  --space-studio-label-top: clamp(16px, calc(100vw * 24 / 1920), 24px);
+  --space-studio-headline-top: clamp(32px, calc(100vw * 60 / 1920), 60px);
+  --space-studio-cards-top: clamp(48px, calc(100vw * 120 / 1920), 120px);
+  --space-studio-card-footer-top: clamp(16px, calc(100vw * 24 / 1920), 24px);
+  --space-studio-cards-gap: clamp(24px, calc(100vw * 48 / 1920), 48px);
+  --space-founder-name-role-gap: clamp(16px, calc(100vw * 40 / 1920), 40px);
+
+  /* Contact section — Figma px at 1920 */
+  --text-contact-cta: clamp(22px, calc(100vw * 34 / 1920), 34px);
+  --space-contact-subheadline-gap: clamp(24px, calc(100vw * 48 / 1920), 48px);
+  --space-contact-cta-gap: clamp(40px, calc(100vw * 70 / 1920), 70px);
 
   /* Selected work layout — Figma px at 1920 */
   --space-works-inset: clamp(24px, calc(100vw * 48 / 1920), 48px);
@@ -183,6 +215,76 @@ body {
   text-align: center;
   /* Figma -0.5px at 24px */
   letter-spacing: -0.0208em;
+}
+
+.type-service-item {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-service-item);
+  font-style: normal;
+  font-weight: 600;
+  line-height: 105%;
+  /* Figma -2px at 128px */
+  letter-spacing: -0.0156em;
+}
+
+.type-service-index {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-service-index);
+  font-style: normal;
+  font-weight: 600;
+  line-height: 118.755%;
+  /* Figma 0.2px at 20px */
+  letter-spacing: 0.01em;
+}
+
+.type-service-caption {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-service-caption);
+  font-style: normal;
+  font-weight: 500;
+  line-height: 120%;
+  /* Figma -0.5px at 22px */
+  letter-spacing: -0.0227em;
+}
+
+.type-studio-body {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-studio-body);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 120%;
+  /* Figma -0.5px at 24px */
+  letter-spacing: -0.0208em;
+}
+
+.type-founder-name {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-founder-name);
+  font-style: normal;
+  font-weight: 600;
+  line-height: 120%;
+  color: #000;
+  /* Figma -0.5px at 64px */
+  letter-spacing: -0.0078125em;
+}
+
+.type-founder-role {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-founder-role);
+  font-style: normal;
+  font-weight: 500;
+  line-height: 130%;
+  letter-spacing: 0;
+}
+
+.type-contact-cta {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-contact-cta);
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+  letter-spacing: 0;
+  text-align: center;
 }
 
 .work-card-tag {

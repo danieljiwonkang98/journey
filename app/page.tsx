@@ -1,11 +1,15 @@
+import ContactSection from "@/components/ContactSection";
 import CraftManifestoSection from "@/components/CraftManifestoSection";
 import DotWalkers from "@/components/DotWalkers";
+import FounderPhotoSection from "@/components/FounderPhotoSection";
 import HeroCorner from "@/components/HeroCorner";
 import HeroNav from "@/components/HeroNav";
 import HowWeWorkSection from "@/components/HowWeWorkSection";
 import JourneyWordmark from "@/components/JourneyWordmark";
 import ManifestoSection from "@/components/ManifestoSection";
 import SelectedWorkSection from "@/components/SelectedWorkSection";
+import ServicesScrollSection from "@/components/ServicesScrollSection";
+import StudioSection from "@/components/StudioSection";
 import WaveBarsTransition from "@/components/WaveBarsTransition";
 
 export default function Home() {
@@ -41,6 +45,18 @@ export default function Home() {
 
       {/* How we work — white, centered */}
       <HowWeWorkSection />
+
+      {/* Services — scroll-driven category + media swap */}
+      <ServicesScrollSection />
+
+      {/* Founders — full-page photo */}
+      <FounderPhotoSection />
+
+      {/* Studio — founders intro */}
+      <StudioSection />
+
+      {/* Contact — bright DotWalkers + CTA */}
+      <ContactSection />
     </main>
   );
 }

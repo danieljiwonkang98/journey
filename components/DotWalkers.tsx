@@ -5,11 +5,10 @@ import { useEffect, useRef } from "react";
 const SS = 2;
 
 const params = {
-  count: 6,
+  count: 10,
   speed: 70,
   size: 1.0,
   gap: 11,
-  invert: false,
 };
 
 function rnd(a: number, b: number) {
@@ -363,7 +362,7 @@ function drawFigure(
   g.globalAlpha = 1;
 }
 
-export default function DotWalkers() {
+export default function DotWalkers({ bright = false }: { bright?: boolean }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -391,7 +390,7 @@ export default function DotWalkers() {
     let cols = 0;
     let rows = 0;
     let mouse: { x: number; y: number } | null = null;
-    let walkers: WalkerState[] = [];
+    const walkers: WalkerState[] = [];
     let rafId = 0;
     let last = performance.now();
 
@@ -439,7 +438,16 @@ export default function DotWalkers() {
         const col = w.accent ? "#00ff00" : "#ff0000";
         drawFigure(fctx2, w, sf, col, DPR);
         for (const f of w.feet) {
-          drawShoe(fctx2, f.x, f.y, f.ang, walkerScale(w, DPR), f.lift, sf, col);
+          drawShoe(
+            fctx2,
+            f.x,
+            f.y,
+            f.ang,
+            walkerScale(w, DPR),
+            f.lift,
+            sf,
+            col,
+          );
         }
       }
       fctx2.globalCompositeOperation = "source-over";
@@ -447,8 +455,8 @@ export default function DotWalkers() {
       loctx2.drawImage(field, 0, 0, cols, rows);
       const img = loctx2.getImageData(0, 0, cols, rows).data;
 
-      const inv = params.invert;
-      ctx2.fillStyle = inv ? "#f4f4f4" : "#000";
+      const inv = bright;
+      ctx2.fillStyle = inv ? "#ffffff" : "#000";
       ctx2.fillRect(0, 0, W, H);
 
       const gap = params.gap * DPR;
@@ -521,7 +529,7 @@ export default function DotWalkers() {
       );
       window.removeEventListener("blur", onPointerLeave);
     };
-  }, []);
+  }, [bright]);
 
   return (
     <div ref={containerRef} className="absolute inset-0">
