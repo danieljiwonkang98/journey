@@ -505,15 +505,20 @@ export default function DotWalkers() {
 
     const observer = new ResizeObserver(resize);
     observer.observe(container);
-    container.addEventListener("pointermove", onPointerMove);
-    container.addEventListener("pointerleave", onPointerLeave);
+    // Listen on window so flee-from-cursor still works when the canvas
+    // sits under scrolling content with pointer-events-none.
+    window.addEventListener("pointermove", onPointerMove);
+    document.documentElement.addEventListener("pointerleave", onPointerLeave);
     window.addEventListener("blur", onPointerLeave);
 
     return () => {
       cancelAnimationFrame(rafId);
       observer.disconnect();
-      container.removeEventListener("pointermove", onPointerMove);
-      container.removeEventListener("pointerleave", onPointerLeave);
+      window.removeEventListener("pointermove", onPointerMove);
+      document.documentElement.removeEventListener(
+        "pointerleave",
+        onPointerLeave,
+      );
       window.removeEventListener("blur", onPointerLeave);
     };
   }, []);

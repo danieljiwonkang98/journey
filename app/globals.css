@@ -13,6 +13,42 @@
   --journey-black: #2c2c2c;
   --journey-gray: #f1f2f4;
   --journey-text-neutral: #454545;
+
+  /*
+    Figma desktop frame. Compare the site at this size (100% zoom)
+    to judge type against the design. Values below are Figma px at
+    this frame, then scale with viewport via clamp().
+  */
+  --design-w: 1920;
+  --design-h: 1080;
+
+  /* Fluid size from Figma px: exact at 1920×1080, scales down below */
+  --text-meta: clamp(12px, calc(100vw * 14 / 1920), 14px);
+  --text-nav: clamp(14px, calc(100vw * 18 / 1920), 18px);
+  --text-tagline: clamp(14px, calc(100vw * 20 / 1920), 20px);
+  --text-manifesto: clamp(
+    22px,
+    min(calc(100vw * 76 / 1920), calc(100dvh * 76 / 1080)),
+    76px
+  );
+  --text-section-label: clamp(16px, calc(100vw * 22 / 1920), 22px);
+  --text-section-headline: clamp(
+    36px,
+    min(calc(100vw * 100 / 1920), calc(100dvh * 100 / 1080)),
+    100px
+  );
+  --text-card-tag: clamp(13px, calc(100vw * 16 / 1920), 16px);
+  --text-card-title: clamp(28px, calc(100vw * 48 / 1920), 48px);
+  --text-card-subtitle: clamp(15px, calc(100vw * 18 / 1920), 18px);
+
+  /* Selected work layout — Figma px at 1920 */
+  --space-works-inset: clamp(24px, calc(100vw * 48 / 1920), 48px);
+  --space-works-label-top: clamp(16px, calc(100vw * 24 / 1920), 24px);
+  --space-works-headline-top: clamp(32px, calc(100vw * 60 / 1920), 60px);
+  --space-works-cards-top: clamp(48px, calc(100vw * 120 / 1920), 120px);
+
+  --work-card-w: clamp(280px, calc(100vw * 700 / 1920), 700px);
+  --work-card-h: clamp(356px, calc(100vw * 890 / 1920), 890px);
 }
 
 @theme inline {
@@ -31,6 +67,112 @@
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+/*
+  Full type recipes from Figma (family + size + weight + leading + tracking).
+  Use these instead of one-off font-size utilities so desktop matches the frame.
+*/
+.type-meta {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-meta);
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: 0;
+}
+
+.type-nav {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-nav);
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.type-tagline {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-tagline);
+  font-weight: 500;
+  line-height: 1.2;
+  /* Figma -0.5px at 20px → -0.025em so tracking scales with size */
+  letter-spacing: -0.025em;
+}
+
+.type-manifesto {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-manifesto);
+  font-weight: 500;
+  line-height: 1.05;
+  /* Figma -2px at 76px → -0.0263em */
+  letter-spacing: -0.0263em;
+}
+
+.type-section-label {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-section-label);
+  font-style: normal;
+  font-weight: 500;
+  line-height: 120%;
+  /* Figma -0.5px at 22px → em so tracking scales with size */
+  letter-spacing: -0.0227em;
+}
+
+.type-section-headline {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-section-headline);
+  font-style: normal;
+  font-weight: 500;
+  line-height: 105%;
+  /* Figma -2px at 100px → em so tracking scales with size */
+  letter-spacing: -0.02em;
+}
+
+.type-card-tag {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-card-tag);
+  font-weight: 600;
+  line-height: 160%;
+  /* Figma 0.08px at 16px */
+  letter-spacing: 0.005em;
+}
+
+.type-card-title {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-card-title);
+  font-weight: 600;
+  line-height: 105%;
+  /* Figma -2px at 48px */
+  letter-spacing: -0.0417em;
+}
+
+.type-card-subtitle {
+  font-family: var(--font-urbanist);
+  font-size: var(--text-card-subtitle);
+  font-weight: 600;
+  line-height: 100%;
+  /* Figma 0.09px at 18px */
+  letter-spacing: 0.005em;
+}
+
+.work-card-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 8px 16px;
+  border-radius: 32px;
+  background: rgba(17, 17, 17, 0.2);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.work-cards-row {
+  scrollbar-width: none;
+}
+
+.work-cards-row::-webkit-scrollbar {
+  display: none;
 }
 
 /* Figma Glass: Light -45°/20%, Refraction 59, Depth 39, Dispersion 28, Frost 12, Splay 28 */

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useEffectEvent, useState } from "react";
 
 function formatGmtPlus2Time(date: Date) {
   const utc = date.getTime() + date.getTimezoneOffset() * 60_000;
@@ -14,6 +14,12 @@ function formatGmtPlus2Time(date: Date) {
 
 export default function HeroCorner() {
   const [time, setTime] = useState("");
+  const [visible, setVisible] = useState(true);
+
+  const updateVisibility = useEffectEvent(() => {
+    // Stay visible through the hero; fade only as the manifesto section arrives
+    setVisible(window.scrollY < window.innerHeight);
+  });
 
   useEffect(() => {
     const update = () => setTime(formatGmtPlus2Time(new Date()));
@@ -22,9 +28,25 @@ export default function HeroCorner() {
     return () => clearInterval(id);
   }, []);
 
+  useEffect(() => {
+    updateVisibility();
+    window.addEventListener("scroll", updateVisibility, { passive: true });
+    window.addEventListener("resize", updateVisibility);
+    return () => {
+      window.removeEventListener("scroll", updateVisibility);
+      window.removeEventListener("resize", updateVisibility);
+    };
+  }, []);
+
   return (
-    <div className="fixed top-4 right-4 z-50 flex flex-col items-end gap-3 sm:top-6 sm:right-6">
-      <div className="flex flex-col items-end gap-0.5 font-[family-name:var(--font-urbanist)] text-sm leading-tight text-white">
+    <div
+      className="fixed top-4 right-4 z-50 flex flex-col items-end gap-3 transition-opacity duration-300 sm:top-6 sm:right-6"
+      style={{
+        opacity: visible ? 1 : 0,
+        pointerEvents: visible ? "auto" : "none",
+      }}
+    >
+      <div className="type-meta flex flex-col items-end gap-0.5 text-white">
         <span>{time}</span>
         <a
           href="mailto:hello@startjourney.today"

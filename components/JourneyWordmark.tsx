@@ -59,10 +59,7 @@ export default function JourneyWordmark() {
           />
 
           <div className={`flex ${J_HEIGHT} flex-col`}>
-            <p
-              className="-mt-1 text-left font-[family-name:var(--font-urbanist)] text-[clamp(14px,1.4vw,20px)] leading-[120%] font-medium text-white sm:-mt-1.5"
-              style={{ letterSpacing: "-0.5px" }}
-            >
+            <p className="type-tagline -mt-1 text-left text-white sm:-mt-1.5">
               <span className="block whitespace-nowrap">
                 A two-person product studio.
               </span>

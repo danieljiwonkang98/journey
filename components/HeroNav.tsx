@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const NAV_LINKS = [
-  { label: "WORKS", href: "#" },
+  { label: "WORKS", href: "#works" },
   { label: "WHO WE ARE", href: "#" },
   { label: "SERVICES", href: "#" },
 ] as const;
@@ -26,7 +26,7 @@ export default function HeroNav() {
             <Link
               key={link.label}
               href={link.href}
-              className="font-[family-name:var(--font-urbanist)] text-center text-[18px] leading-5 font-bold text-white"
+              className="type-nav text-white"
             >
               {link.label}
             </Link>
@@ -35,7 +35,7 @@ export default function HeroNav() {
 
         <Link
           href="mailto:hello@startjourney.today"
-          className="ml-4 flex h-12 items-center justify-center gap-2 rounded-[48px] bg-black px-5 font-[family-name:var(--font-urbanist)] text-[18px] leading-5 font-bold text-white"
+          className="type-nav ml-4 flex h-12 items-center justify-center gap-2 rounded-[48px] bg-black px-5 text-white"
         >
           LET&apos;S TALK
           <Image
