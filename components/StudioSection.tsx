@@ -62,7 +62,7 @@ export default function StudioSection() {
   return (
     <section
       id="studio"
-      className="relative z-10 bg-white"
+      className="relative z-10 scroll-mt-24 bg-white"
       aria-labelledby="studio-heading"
     >
       <div className="px-[var(--space-works-inset)]" aria-hidden>

@@ -2,7 +2,7 @@ export default function HowWeWorkSection() {
   return (
     <section
       id="how-we-work"
-      className="relative z-10 flex min-h-[66.67dvh] items-center justify-center bg-white px-6 pb-24 pt-16"
+      className="relative z-10 flex min-h-[66.67dvh] scroll-mt-[min(30vh,280px)] items-center justify-center bg-white px-6 pb-24 pt-16"
       aria-labelledby="how-we-work-heading"
     >
       <div className="-translate-y-[min(5vh,48px)] flex max-w-[min(1100px,92vw)] flex-col items-center text-center">

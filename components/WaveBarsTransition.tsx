@@ -65,23 +65,7 @@ export default function WaveBarsTransition() {
     let rafId = 0;
     let running = false;
 
-    const resize = () => {
-      DPR = Math.min(window.devicePixelRatio || 1, 2);
-      const { clientWidth, clientHeight } = wrap;
-      W = canvas.width = clientWidth * DPR;
-      H = canvas.height = clientHeight * DPR;
-      canvas.style.width = `${clientWidth}px`;
-      canvas.style.height = `${clientHeight}px`;
-    };
-
-    const draw = (now: number) => {
-      if (!running) return;
-      rafId = requestAnimationFrame(draw);
-
-      const dt = Math.min((now - last) / 1000, 0.05);
-      last = now;
-      t += dt * PARAMS.speed;
-
+    const paint = (time: number) => {
       const tw = PARAMS.pitch * DPR * 0.5;
       const r = tw / 2;
       const amp = PARAMS.amp * DPR;
@@ -98,10 +82,10 @@ export default function WaveBarsTransition() {
 
       for (let k = -1; k <= n; k++) {
         const x = k * tw;
-        const mid = baseY + wave(k * 0.5, t, 0) * amp;
+        const mid = baseY + wave(k * 0.5, time, 0) * amp;
         if ((k & 1) === 0) {
           const f = clamp(
-            0.15 + 0.85 * (0.5 + 0.5 * wave(k, t, 1)),
+            0.15 + 0.85 * (0.5 + 0.5 * wave(k, time, 1)),
             0.12,
             0.95,
           );
@@ -110,7 +94,7 @@ export default function WaveBarsTransition() {
           ctx.arc(x + r, tip - r, r, Math.PI, 0, true);
         } else {
           const f = clamp(
-            0.15 + 0.85 * (0.5 + 0.5 * wave(k, t, 2)),
+            0.15 + 0.85 * (0.5 + 0.5 * wave(k, time, 2)),
             0.12,
             0.95,
           );
@@ -123,6 +107,30 @@ export default function WaveBarsTransition() {
       ctx.lineTo((n + 1) * tw, 0);
       ctx.closePath();
       ctx.fill();
+    };
+
+    const resize = () => {
+      DPR = Math.min(window.devicePixelRatio || 1, 2);
+      const { clientWidth, clientHeight } = wrap;
+      if (clientWidth <= 0 || clientHeight <= 0) return;
+
+      W = canvas.width = Math.round(clientWidth * DPR);
+      H = canvas.height = Math.round(clientHeight * DPR);
+      canvas.style.width = `${clientWidth}px`;
+      canvas.style.height = `${clientHeight}px`;
+
+      // Paint immediately so the seam stays white before scroll/intersection.
+      paint(t);
+    };
+
+    const draw = (now: number) => {
+      if (!running) return;
+      rafId = requestAnimationFrame(draw);
+
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+      t += dt * PARAMS.speed;
+      paint(t);
     };
 
     const start = () => {
@@ -160,10 +168,14 @@ export default function WaveBarsTransition() {
   return (
     <div
       ref={wrapRef}
-      className="relative z-10 h-[min(42vh,420px)] w-full bg-black"
+      id="services-entry"
+      className="relative z-10 h-[min(42vh,420px)] w-full overflow-hidden bg-white"
       aria-hidden
     >
-      <canvas ref={canvasRef} className="block h-full w-full" />
+      <canvas
+        ref={canvasRef}
+        className="block h-full w-full max-h-full max-w-full"
+      />
     </div>
   );
 }

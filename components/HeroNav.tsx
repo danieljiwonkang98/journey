@@ -2,9 +2,17 @@ import HeroNavLogo from "@/components/HeroNavLogo";
 import Link from "next/link";
 
 const NAV_LINKS = [
-  { label: "WORKS", href: "#works", hoverClass: "hover:text-[#A66BFB]" },
-  { label: "WHO WE ARE", href: "#", hoverClass: "hover:text-[#2D91F3]" },
-  { label: "SERVICES", href: "#", hoverClass: "hover:text-[#E2838C]" },
+  { label: "WORKS", href: "/works", hoverClass: "hover:text-[#A66BFB]" },
+  {
+    label: "WHO WE ARE",
+    href: "/#studio",
+    hoverClass: "hover:text-[#2D91F3]",
+  },
+  {
+    label: "SERVICES",
+    href: "/#how-we-work",
+    hoverClass: "hover:text-[#E2838C]",
+  },
 ] as const;
 
 export default function HeroNav() {

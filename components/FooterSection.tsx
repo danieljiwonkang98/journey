@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const EXPLORE_LINKS = [
-  { label: "Works", href: "#works" },
+  { label: "Works", href: "/works" },
   { label: "Who we are", href: "#studio" },
   { label: "Let's talk", href: "mailto:daniel@startjourney.today" },
 ] as const;

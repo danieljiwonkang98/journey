@@ -1,5 +1,6 @@
 "use client";
 
+import { attachSeamlessLoop } from "@/lib/seamlessVideoLoop";
 import { useEffect, useEffectEvent, useRef } from "react";
 
 const VIDEO_SRC = "/videos/cheetah.mp4";
@@ -35,15 +36,11 @@ export default function CraftManifestoSection() {
       if (right.paused && !left.paused) void right.play();
     };
 
-    const onEnded = () => {
-      left.currentTime = 0;
-      right.currentTime = 0;
-      void playBoth();
-    };
-
     left.addEventListener("timeupdate", syncFromLeft);
-    left.addEventListener("ended", onEnded);
-    right.addEventListener("ended", onEnded);
+
+    const detachLoop = attachSeamlessLoop(left, () => {
+      right.currentTime = 0;
+    });
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -61,8 +58,7 @@ export default function CraftManifestoSection() {
 
     return () => {
       left.removeEventListener("timeupdate", syncFromLeft);
-      left.removeEventListener("ended", onEnded);
-      right.removeEventListener("ended", onEnded);
+      detachLoop();
       observer.disconnect();
     };
   }, []);
@@ -88,7 +84,6 @@ export default function CraftManifestoSection() {
           style={{ aspectRatio: "2160 / 1080" }}
           src={VIDEO_SRC}
           muted
-          loop
           playsInline
           autoPlay
           preload="auto"
@@ -105,7 +100,6 @@ export default function CraftManifestoSection() {
           style={{ aspectRatio: "2160 / 1080" }}
           src={VIDEO_SRC}
           muted
-          loop
           playsInline
           autoPlay
           preload="auto"
