@@ -36,9 +36,9 @@ export default function ContactSection() {
       <div className="relative z-10 flex h-full items-center justify-center px-6">
         <div className="flex max-w-[min(1100px,92vw)] flex-col items-center text-center">
           <h2 id="contact-heading" className="type-section-headline text-black">
-            Just the two of us.
+            Have an idea worth
             <br />
-            and your idea.
+            taking further?
           </h2>
 
           <p

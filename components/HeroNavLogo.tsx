@@ -21,27 +21,17 @@ export default function HeroNavLogo() {
     <Link
       href="/"
       onClick={handleClick}
-      className="group relative block shrink-0"
+      className="relative block shrink-0"
       style={{ width: LOGO_WIDTH, height: LOGO_HEIGHT }}
       aria-label="Journey home"
     >
       <Image
-        src="/icons/journey_white_circle_logo.svg"
+        src="/icons/Journey_colored_circle.svg"
         alt="Journey"
         width={2814}
         height={2598}
         style={{ width: LOGO_WIDTH, height: LOGO_HEIGHT }}
-        className="absolute inset-0 object-contain transition-opacity duration-300 group-hover:opacity-0"
-        priority
-      />
-      <Image
-        src="/icons/Journey_colored_circle.svg"
-        alt=""
-        width={2814}
-        height={2598}
-        style={{ width: LOGO_WIDTH, height: LOGO_HEIGHT }}
-        aria-hidden
-        className="absolute inset-0 object-contain opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        className="absolute inset-0 object-contain"
         priority
       />
     </Link>

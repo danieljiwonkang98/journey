@@ -4,6 +4,8 @@ import { useEffect, useRef } from "react";
 
 const SS = 2;
 
+const WALKER_COLORS = ["#F4E654", "#A66BFB", "#2CE798", "#2D91F3", "#E2838C"];
+
 const params = {
   count: 10,
   speed: 70,
@@ -34,7 +36,7 @@ type WalkerState = {
   x: number;
   y: number;
   dir: number;
-  accent: boolean;
+  color: string;
   body: number;
   stepT: number;
   turn: number;
@@ -42,11 +44,11 @@ type WalkerState = {
   nextPause: number;
   clock: number;
   swingIdx: number;
+  scatterAngle: number;
   feet: Foot[];
 };
 
 function createWalker(
-  walkers: WalkerState[],
   W: number,
   H: number,
   DPR: number,
@@ -57,7 +59,7 @@ function createWalker(
     x: 0,
     y: 0,
     dir: 0,
-    accent: false,
+    color: WALKER_COLORS[Math.floor(Math.random() * WALKER_COLORS.length)],
     body: rnd(0.85, 1.25),
     stepT: rnd(0.5, 0.62),
     turn: 0,
@@ -65,6 +67,7 @@ function createWalker(
     nextPause: rnd(4, 12),
     clock: rnd(0, 1),
     swingIdx: 0,
+    scatterAngle: 0,
     feet: [],
   };
 
@@ -89,9 +92,6 @@ function createWalker(
     }
     w.dir = Math.atan2(H / 2 - w.y, W / 2 - w.x) + rnd(-0.5, 0.5);
   }
-
-  const accents = walkers.filter((o) => o.accent).length;
-  w.accent = accents < 2 && Math.random() < 0.3;
 
   const scale = () => params.size * w.body * DPR;
 
@@ -143,13 +143,17 @@ function walkerFootTarget(
   };
 }
 
+type MouseInfluence =
+  | { kind: "attract"; x: number; y: number }
+  | { kind: "scatter"; x: number; y: number };
+
 function stepWalker(
   w: WalkerState,
   dt: number,
   W: number,
   H: number,
   DPR: number,
-  mouse: { x: number; y: number } | null,
+  influence: MouseInfluence | null,
 ) {
   w.nextPause -= dt;
   if (w.nextPause < 0 && w.pause <= 0) {
@@ -157,24 +161,33 @@ function stepWalker(
     w.nextPause = rnd(5, 14);
   }
 
-  let fleeing = false;
-  let fleeBoost = 1;
-  if (mouse) {
-    const dx = w.x - mouse.x;
-    const dy = w.y - mouse.y;
+  let steered = false;
+  let speedBoost = 1;
+  if (influence?.kind === "attract") {
+    const dx = influence.x - w.x;
+    const dy = influence.y - w.y;
     const dist = Math.hypot(dx, dy);
-    const radius = 220 * DPR;
-    if (dist < radius && dist > 1) {
-      fleeing = true;
+    if (dist > 24 * DPR) {
+      steered = true;
       w.pause = 0;
-      const strength = 1 - dist / radius;
-      const away = Math.atan2(dy, dx);
-      let diff = away - w.dir;
+      const strength = Math.min(1, dist / (320 * DPR));
+      const toward = Math.atan2(dy, dx);
+      let diff = toward - w.dir;
       while (diff > Math.PI) diff -= Math.PI * 2;
       while (diff < -Math.PI) diff += Math.PI * 2;
-      w.dir += diff * Math.min(1, strength * 8 * dt);
-      fleeBoost = 1 + strength * 1.4;
+      w.dir += diff * Math.min(1, (0.45 + strength * 0.55) * 8 * dt);
+      speedBoost = 0.85;
     }
+  } else if (influence?.kind === "scatter") {
+    steered = true;
+    w.pause = 0;
+    const heading = w.scatterAngle;
+    let diff = heading - w.dir;
+    while (diff > Math.PI) diff -= Math.PI * 2;
+    while (diff < -Math.PI) diff += Math.PI * 2;
+    // Ease into the new heading instead of snapping.
+    w.dir += diff * Math.min(1, 2.2 * dt);
+    speedBoost = 1.05;
   }
 
   const walking = w.pause <= 0;
@@ -182,11 +195,11 @@ function stepWalker(
 
   w.turn += rnd(-1.2, 1.2) * dt;
   w.turn *= 0.92;
-  if (walking && !fleeing) w.dir += w.turn * dt * 2;
+  if (walking && !steered) w.dir += w.turn * dt * 2;
 
   const scale = walkerScale(w, DPR);
   const v = walking
-    ? ((params.speed * scale) / DPR) * DPR * 0.9 * fleeBoost
+    ? ((params.speed * scale) / DPR) * DPR * 0.9 * speedBoost
     : 0;
   w.x += Math.cos(w.dir) * v * dt;
   w.y += Math.sin(w.dir) * v * dt;
@@ -217,7 +230,7 @@ function stepWalker(
 
   const m = 180 * DPR;
   if (w.x < -m || w.x > W + m || w.y < -m || w.y > H + m) {
-    const respawned = createWalker([], W, H, DPR, false);
+    const respawned = createWalker(W, H, DPR, false);
     Object.assign(w, respawned);
   }
 }
@@ -390,9 +403,37 @@ export default function DotWalkers({ bright = false }: { bright?: boolean }) {
     let cols = 0;
     let rows = 0;
     let mouse: { x: number; y: number } | null = null;
+    let lastMouseMove = 0;
+    let mode: "free" | "attract" | "scatter" = "free";
+    let scatterOrigin: { x: number; y: number } | null = null;
+    let scatterUntil = 0;
+    const MOUSE_IDLE_MS = 1500;
+    const SCATTER_MS = 2200;
     const walkers: WalkerState[] = [];
     let rafId = 0;
     let last = performance.now();
+
+    function beginScatter(origin: { x: number; y: number }, now: number) {
+      mode = "scatter";
+      scatterOrigin = origin;
+      scatterUntil = now + SCATTER_MS;
+      // Aim at a random cardinal; steering eases toward it over time.
+      const cardinals = [0, Math.PI / 2, Math.PI, (Math.PI * 3) / 2];
+      for (const w of walkers) {
+        let heading = cardinals[Math.floor(Math.random() * cardinals.length)];
+        // Prefer a heading that isn't nearly the current direction.
+        let tries = 0;
+        while (tries < 4) {
+          let diff = heading - w.dir;
+          while (diff > Math.PI) diff -= Math.PI * 2;
+          while (diff < -Math.PI) diff += Math.PI * 2;
+          if (Math.abs(diff) > 0.6) break;
+          heading = cardinals[Math.floor(Math.random() * cardinals.length)];
+          tries++;
+        }
+        w.scatterAngle = heading;
+      }
+    }
 
     function rebuildField() {
       cols = Math.ceil(W / (params.gap * DPR)) + 1;
@@ -416,7 +457,7 @@ export default function DotWalkers({ bright = false }: { bright?: boolean }) {
 
     function setCount(n: number) {
       while (walkers.length < n) {
-        walkers.push(createWalker(walkers, W, H, DPR, true));
+        walkers.push(createWalker(W, H, DPR, true));
       }
       walkers.length = n;
     }
@@ -425,7 +466,29 @@ export default function DotWalkers({ bright = false }: { bright?: boolean }) {
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
 
-      for (const w of walkers) stepWalker(w, dt, W, H, DPR, mouse);
+      const mouseActive = !!mouse && now - lastMouseMove < MOUSE_IDLE_MS;
+      if (mouseActive) {
+        mode = "attract";
+        scatterOrigin = null;
+      } else if (mode === "attract" && mouse) {
+        beginScatter(mouse, now);
+      } else if (mode === "scatter" && now >= scatterUntil) {
+        mode = "free";
+        scatterOrigin = null;
+      }
+
+      let influence: MouseInfluence | null = null;
+      if (mode === "attract" && mouse) {
+        influence = { kind: "attract", x: mouse.x, y: mouse.y };
+      } else if (mode === "scatter" && scatterOrigin) {
+        influence = {
+          kind: "scatter",
+          x: scatterOrigin.x,
+          y: scatterOrigin.y,
+        };
+      }
+
+      for (const w of walkers) stepWalker(w, dt, W, H, DPR, influence);
 
       const sf = SS / (params.gap * DPR);
       fctx2.filter = "none";
@@ -435,8 +498,7 @@ export default function DotWalkers({ bright = false }: { bright?: boolean }) {
       fctx2.fillRect(0, 0, cols * SS, rows * SS);
       fctx2.globalCompositeOperation = "lighter";
       for (const w of walkers) {
-        const col = w.accent ? "#00ff00" : "#ff0000";
-        drawFigure(fctx2, w, sf, col, DPR);
+        drawFigure(fctx2, w, sf, w.color, DPR);
         for (const f of w.feet) {
           drawShoe(
             fctx2,
@@ -446,7 +508,7 @@ export default function DotWalkers({ bright = false }: { bright?: boolean }) {
             walkerScale(w, DPR),
             f.lift,
             sf,
-            col,
+            w.color,
           );
         }
       }
@@ -455,36 +517,32 @@ export default function DotWalkers({ bright = false }: { bright?: boolean }) {
       loctx2.drawImage(field, 0, 0, cols, rows);
       const img = loctx2.getImageData(0, 0, cols, rows).data;
 
-      const inv = bright;
-      ctx2.fillStyle = inv ? "#ffffff" : "#000";
+      ctx2.fillStyle = bright ? "#ffffff" : "#000";
       ctx2.fillRect(0, 0, W, H);
 
       const gap = params.gap * DPR;
       const maxR = gap * 0.47;
       const ambient = 0.05;
-
-      const base = inv ? [10, 10, 10] : [255, 255, 255];
-      const AC = [0x53, 0xaa, 0xff];
-      const pal: string[] = [];
-      for (let k = 0; k <= 10; k++) {
-        const t = k / 10;
-        pal.push(
-          `rgb(${Math.round(base[0] + (AC[0] - base[0]) * t)},${Math.round(base[1] + (AC[1] - base[1]) * t)},${Math.round(base[2] + (AC[2] - base[2]) * t)})`,
-        );
-      }
+      const gridCol = bright ? "rgb(12,12,12)" : "rgb(210,210,210)";
 
       for (let j = 0; j < rows; j++) {
         const y = j * gap;
         for (let i = 0; i < cols; i++) {
           const idx = (j * cols + i) * 4;
-          const nB = img[idx] / 255;
-          const aB = img[idx + 1] / 255;
-          let b = nB + aB + ambient;
+          const wr = img[idx];
+          const wg = img[idx + 1];
+          const wb = img[idx + 2];
+          const maxC = Math.max(wr, wg, wb);
+          let b = maxC / 255 + ambient;
           if (b > 1) b = 1;
           const r = maxR * Math.pow(b, 0.6);
           if (r < 0.35) continue;
-          const t = aB > 0.003 ? aB / (nB + aB) : 0;
-          ctx2.fillStyle = pal[Math.round(t * 10)];
+          if (maxC < 1) {
+            ctx2.fillStyle = gridCol;
+          } else {
+            const s = 255 / maxC;
+            ctx2.fillStyle = `rgb(${Math.round(wr * s)},${Math.round(wg * s)},${Math.round(wb * s)})`;
+          }
           ctx2.globalAlpha = Math.min(0.22 + b, 1);
           ctx2.beginPath();
           ctx2.arc(i * gap, y, r, 0, 6.2832);
@@ -501,9 +559,13 @@ export default function DotWalkers({ bright = false }: { bright?: boolean }) {
         x: (e.clientX - rect.left) * DPR,
         y: (e.clientY - rect.top) * DPR,
       };
+      lastMouseMove = performance.now();
     };
 
     const onPointerLeave = () => {
+      if (mode === "attract" && mouse) {
+        beginScatter(mouse, performance.now());
+      }
       mouse = null;
     };
 
@@ -513,7 +575,7 @@ export default function DotWalkers({ bright = false }: { bright?: boolean }) {
 
     const observer = new ResizeObserver(resize);
     observer.observe(container);
-    // Listen on window so flee-from-cursor still works when the canvas
+    // Listen on window so seek-to-cursor still works when the canvas
     // sits under scrolling content with pointer-events-none.
     window.addEventListener("pointermove", onPointerMove);
     document.documentElement.addEventListener("pointerleave", onPointerLeave);

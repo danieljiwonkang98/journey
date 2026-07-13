@@ -50,10 +50,7 @@ export default function WhatWeMakeSection() {
         className="relative px-[var(--space-works-page-inset-x)]"
         style={{ paddingTop: "var(--space-works-page-top)" }}
       >
-        <h1
-          id="what-we-make-heading"
-          className="type-works-page-headline"
-        >
+        <h1 id="what-we-make-heading" className="type-works-page-headline">
           What We Make
         </h1>
 

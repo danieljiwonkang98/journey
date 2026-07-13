@@ -41,7 +41,8 @@ export const WORKS: readonly Work[] = [
     title: "InterviewShield",
     subtitle: "Security",
     image: "/images/card_preview/interviewshield_card.png",
-    previewImage: "/images/works/what_we_make_previews/interviewshield_preview.png",
+    previewImage:
+      "/images/works/what_we_make_previews/interviewshield_preview.png",
     tags: ["Desktop App", "AI", "Security UX"],
   },
   {

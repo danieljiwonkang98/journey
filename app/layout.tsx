@@ -10,7 +10,8 @@ const urbanist = Urbanist({
 
 export const metadata: Metadata = {
   title: "Journey",
-  description: "A two-person product studio. We design and build digital products by hand, end to end.",
+  description:
+    "A two-person product studio. We design and build digital products by hand, end to end.",
 };
 
 export default function RootLayout({

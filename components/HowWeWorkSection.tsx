@@ -13,20 +13,20 @@ export default function HowWeWorkSection() {
           className="type-section-headline text-black"
           style={{ marginTop: "var(--space-craft-label-gap)" }}
         >
-          One team
+          We Work in
           <br />
-          the whole way through.
+          Clear Stages.
         </h2>
 
         <p
           className="type-craft-body text-[#7A7A7A]"
           style={{ marginTop: "var(--space-craft-headline-gap)" }}
         >
-          No outsourcing, no handoffs.
+          First, we define what to build.
           <br />
-          The two of us take your product from strategy to launch
+          Then we design, develop, and launch it
           <br />
-          fewer people to brief, and nothing lost in translation.
+          with regular reviews and clear next steps.
         </p>
       </div>
     </section>

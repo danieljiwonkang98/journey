@@ -15,13 +15,13 @@ export default function JourneyWordmark() {
   return (
     <>
       {/*
-        Exclusion on the wordmark root — same setup that worked before.
-        Avoid transform / overflow / z-index here; they isolate this layer
-        from the DotWalkers canvas and hide the Figma blend.
+        Figma: mix-blend-mode: exclusion on the letter row.
+        Keep this node free of transform / overflow / z-index, and keep
+        ancestors free of stacking contexts (see page.tsx hero section),
+        or the blend won’t reach the DotWalkers canvas behind it.
       */}
       <div
-        className={`pointer-events-none absolute inset-x-0 bottom-0 flex w-full justify-center px-2 pb-2 sm:px-4 sm:pb-4`}
-        style={{ mixBlendMode: "exclusion" }}
+        className={`pointer-events-none absolute inset-x-0 bottom-0 flex w-full justify-center px-2 pb-2 sm:px-4 sm:pb-4 mix-blend-exclusion`}
       >
         <div
           className={`flex w-full max-w-[1400px] items-end justify-center ${GAP}`}
@@ -61,10 +61,10 @@ export default function JourneyWordmark() {
           <div className={`flex ${J_HEIGHT} flex-col`}>
             <p className="type-tagline -mt-1 text-left text-white sm:-mt-1.5">
               <span className="block whitespace-nowrap">
-                A two-person product studio.
+                Every idea starts with a step.
               </span>
               <span className="block whitespace-nowrap">
-                We design and build digital products by hand, end to end.
+                We design and build digital products from idea to launch.
               </span>
             </p>
 

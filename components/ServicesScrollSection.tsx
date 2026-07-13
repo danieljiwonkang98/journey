@@ -13,43 +13,43 @@ type Service = {
 
 const SERVICES: readonly Service[] = [
   {
-    id: "product-design",
+    id: "product-strategy",
     index: "001",
-    title: "Product Design",
+    title: "Product Strategy",
     caption:
-      "Shaping interfaces and flows that feel inevitable, clear, calm, and built for real use.",
-    image: "/images/services/product-design.png",
-  },
-  {
-    id: "strategy",
-    index: "002",
-    title: "Strategy & Planning",
-    caption:
-      "Mapping the problem, the audience, and the path so every build decision has a reason.",
+      "Defining the problem, the audience, and the clearest path to a useful product.",
     image: "/images/services/strategy-planning.png",
   },
   {
-    id: "growth",
-    index: "003",
-    title: "Growth Marketing",
+    id: "product-design",
+    index: "002",
+    title: "Product Design",
     caption:
-      "Creating campaigns and digital strategies that turn attention into sustainable growth.",
+      "Shaping flows and interfaces around how people will actually use the product.",
+    image: "/images/services/product-design.png",
+  },
+  {
+    id: "product-development",
+    index: "003",
+    title: "Development",
+    caption:
+      "Building polished products across mobile and web, with the design intent intact.",
     image: "/images/services/growth-marketing.png",
   },
   {
     id: "motion",
     index: "004",
-    title: "Motion Design",
+    title: "Motion & Interaction",
     caption:
-      "Motion that carries meaning through microinteractions and sequences that make the product feel alive.",
+      "Using movement to guide attention, clarify feedback, and give the product a distinct feel.",
     image: "/images/services/motion-design.png",
   },
   {
     id: "launch",
     index: "005",
-    title: "Launch & Support",
+    title: "Launch & Iteration",
     caption:
-      "Shipping with care, then staying close while we polish, iterate, and keep the product moving.",
+      "Preparing the release, learning from real use, and improving what comes next.",
     image: "/images/services/launch-support.png",
   },
 ] as const;

@@ -350,7 +350,7 @@ export default function SelectedWorkSection() {
           className="type-section-headline text-white"
           style={{ marginTop: "var(--space-works-headline-top)" }}
         >
-          Five products, shaped
+          Digital products, shaped
           <br />
           from first sketch to final ship.
         </h2>

@@ -82,15 +82,15 @@ export default function StudioSection() {
           style={{ marginTop: "var(--space-studio-headline-top)" }}
         >
           <h2 id="studio-heading" className="type-section-headline text-black">
-            Just the two of us.
+            Leading the work.
           </h2>
 
           <p className="type-studio-body text-[#7A7A7A] lg:pt-2">
-            You work directly with the people who make it. A
+            You work directly with the people who make it.
             <br />
-            designer and a developer, that&apos;s the whole studio, and
+            Design and engineering stay connected from
             <br />
-            that&apos;s the point.
+            first idea to launch.
           </p>
         </div>
 

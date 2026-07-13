@@ -6,6 +6,7 @@ import FounderPhotoSection from "@/components/FounderPhotoSection";
 import HeroCorner from "@/components/HeroCorner";
 import HeroNav from "@/components/HeroNav";
 import HowWeWorkSection from "@/components/HowWeWorkSection";
+import HeroManifestoSnap from "@/components/HeroManifestoSnap";
 import JourneyWordmark from "@/components/JourneyWordmark";
 import ManifestoSection from "@/components/ManifestoSection";
 import SelectedWorkSection from "@/components/SelectedWorkSection";
@@ -24,10 +25,15 @@ export default function Home() {
       {/* Always-on chrome — outside overflow sections so it never clips */}
       <HeroNav />
 
-      {/* Hero — first viewport */}
-      <section className="relative z-10 h-dvh overflow-hidden">
-        {/* Wordmark sits above the canvas (not in an isolated stacking context)
-            so mix-blend-mode: exclusion can invert against the walking dots. */}
+      <HeroManifestoSnap />
+
+      {/* Hero — first viewport.
+          No z-index here: a stacking context would flatten the wordmark’s
+          mix-blend-mode: exclusion before it can invert against DotWalkers. */}
+      <section
+        id="hero"
+        className="relative h-dvh min-h-dvh overflow-hidden"
+      >
         <JourneyWordmark />
         <HeroCorner />
       </section>
