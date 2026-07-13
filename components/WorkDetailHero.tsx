@@ -10,13 +10,16 @@ type WorkDetailHeroProps = {
 
 type EntrancePhase = "covered" | "split" | "settle" | "done";
 
-const ENTRANCE_EASE = "cubic-bezier(0.76, 0, 0.24, 1)";
+/* Panel split ease lives in CSS as --work-entrance-ease.
+   Long expo-style deceleration — fast start, slow glide into place */
+const SETTLE_EASE = "cubic-bezier(0.16, 1, 0.3, 1)";
+const ZOOM_EASE = "cubic-bezier(0.33, 1, 0.68, 1)";
 const HOLD_MS = 350;
 const SPLIT_MS = 900;
-const SETTLE_MS = 900;
+const SETTLE_MS = 1400;
 const SETTLE_START_MS = HOLD_MS + SPLIT_MS - 100;
 const TEXT_RISE_START_MS = SETTLE_START_MS + 50;
-const DONE_MS = 2100;
+const DONE_MS = SETTLE_START_MS + SETTLE_MS + 50;
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -33,6 +36,7 @@ export default function WorkDetailHero({ work }: WorkDetailHeroProps) {
   const [textRise, setTextRise] = useState(false);
   const imageContainerRef = useRef<HTMLDivElement>(null);
   const overlayImageRef = useRef<HTMLDivElement>(null);
+  const overlayZoomRef = useRef<HTMLDivElement>(null);
 
   const animationComplete = phase === "done";
 
@@ -57,11 +61,25 @@ export default function WorkDetailHero({ work }: WorkDetailHeroProps) {
       document.body.style.overflow = previousOverflow;
     }, DONE_MS);
 
+    /* Slow zoom-out on the image across the whole reveal — starts as the
+       curtains open and lands at scale 1 exactly when the overlay hands
+       off to the real in-flow image. */
+    const zoomAnimation = overlayZoomRef.current?.animate(
+      [{ transform: "scale(1.12)" }, { transform: "scale(1)" }],
+      {
+        delay: HOLD_MS,
+        duration: DONE_MS - HOLD_MS,
+        easing: ZOOM_EASE,
+        fill: "both",
+      },
+    );
+
     return () => {
       window.clearTimeout(splitTimer);
       window.clearTimeout(settleTimer);
       window.clearTimeout(textRiseTimer);
       window.clearTimeout(doneTimer);
+      zoomAnimation?.cancel();
       document.body.style.overflow = previousOverflow;
     };
   }, []);
@@ -94,7 +112,7 @@ export default function WorkDetailHero({ work }: WorkDetailHeroProps) {
       ],
       {
         duration: SETTLE_MS,
-        easing: ENTRANCE_EASE,
+        easing: SETTLE_EASE,
         fill: "forwards",
       },
     );
@@ -129,14 +147,19 @@ export default function WorkDetailHero({ work }: WorkDetailHeroProps) {
               zIndex: 0,
             }}
           >
-            <Image
-              src={work.headerImage}
-              alt=""
-              fill
-              sizes="100vw"
-              className="object-cover"
-              priority
-            />
+            <div
+              ref={overlayZoomRef}
+              className="absolute inset-0 will-change-transform"
+            >
+              <Image
+                src={work.headerImage}
+                alt=""
+                fill
+                sizes="100vw"
+                className="object-cover"
+                priority
+              />
+            </div>
           </div>
 
           {phase !== "settle" && (

@@ -744,6 +744,7 @@ html.snap-animating {
 /* Work detail entrance animation */
 :root {
   --work-entrance-ease: cubic-bezier(0.76, 0, 0.24, 1);
+  --work-settle-ease: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .work-entrance-panel {
@@ -763,8 +764,8 @@ html.snap-animating {
   opacity: 0;
   transform: translateY(64px);
   transition:
-    opacity 0.9s var(--work-entrance-ease),
-    transform 0.9s var(--work-entrance-ease);
+    opacity 1.2s var(--work-settle-ease),
+    transform 1.2s var(--work-settle-ease);
 }
 
 .work-detail-rise.is-visible {
