@@ -448,11 +448,27 @@ export default function DotWalkers({ bright = false }: { bright?: boolean }) {
     function resize() {
       const rect = container!.getBoundingClientRect();
       DPR = Math.min(window.devicePixelRatio || 1, 2);
-      W = canvas!.width = Math.round(rect.width * DPR);
-      H = canvas!.height = Math.round(rect.height * DPR);
+      const nextW = Math.round(rect.width * DPR);
+      const nextH = Math.round(rect.height * DPR);
+      // Skip 0×0 mounts (e.g. display:none) — resizing to 0 can stall paint.
+      if (nextW < 1 || nextH < 1) {
+        W = 0;
+        H = 0;
+        if (rafId) {
+          cancelAnimationFrame(rafId);
+          rafId = 0;
+        }
+        return;
+      }
+      W = canvas!.width = nextW;
+      H = canvas!.height = nextH;
       canvas!.style.width = `${rect.width}px`;
       canvas!.style.height = `${rect.height}px`;
       rebuildField();
+      if (!rafId) {
+        last = performance.now();
+        rafId = requestAnimationFrame(frame);
+      }
     }
 
     function setCount(n: number) {
@@ -463,6 +479,11 @@ export default function DotWalkers({ bright = false }: { bright?: boolean }) {
     }
 
     function frame(now: number) {
+      if (W < 1 || H < 1) {
+        rafId = 0;
+        return;
+      }
+
       const dt = Math.min((now - last) / 1000, 0.05);
       last = now;
 
@@ -571,7 +592,9 @@ export default function DotWalkers({ bright = false }: { bright?: boolean }) {
 
     resize();
     setCount(params.count);
-    rafId = requestAnimationFrame(frame);
+    if (!rafId) {
+      rafId = requestAnimationFrame(frame);
+    }
 
     const observer = new ResizeObserver(resize);
     observer.observe(container);
