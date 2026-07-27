@@ -2,7 +2,7 @@ import ContactSection from "@/components/ContactSection";
 import CraftManifestoSection from "@/components/CraftManifestoSection";
 import DotWalkers from "@/components/DotWalkers";
 import FooterSection from "@/components/FooterSection";
-import FounderPhotoSection from "@/components/FounderPhotoSection";
+// import FounderPhotoSection from "@/components/FounderPhotoSection";
 import HeroCorner from "@/components/HeroCorner";
 import HeroNav from "@/components/HeroNav";
 import HowWeWorkSection from "@/components/HowWeWorkSection";
@@ -57,8 +57,9 @@ export default function DesktopHome() {
       <ServicesScrollSection />
       */}
 
-      {/* Founders — full-page photo */}
+      {/* Founders — full-page photo
       <FounderPhotoSection />
+      */}
 
       {/* Studio — founders intro */}
       <StudioSection />

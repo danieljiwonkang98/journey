@@ -5,6 +5,10 @@ import { useEffect, useRef } from "react";
 const SS = 2;
 
 const WALKER_COLORS = ["#F4E654", "#A66BFB", "#2CE798", "#2D91F3", "#E2838C"];
+/** Hero scene: mostly white walkers, with a few blue accents. */
+const HERO_WHITE = "#FFFFFF";
+const HERO_BLUE = "#2D91F3";
+const HERO_ACCENT_MAX = 2;
 
 const params = {
   count: 10,
@@ -48,18 +52,33 @@ type WalkerState = {
   feet: Foot[];
 };
 
+function pickWalkerColor(
+  palette: "hero" | "spectrum",
+  others: WalkerState[],
+): string {
+  if (palette === "spectrum") {
+    return WALKER_COLORS[Math.floor(Math.random() * WALKER_COLORS.length)];
+  }
+  // Hero: mostly white footsteps; at most one or two blue accents.
+  const accents = others.filter((o) => o.color === HERO_BLUE).length;
+  if (accents < HERO_ACCENT_MAX && Math.random() < 0.3) return HERO_BLUE;
+  return HERO_WHITE;
+}
+
 function createWalker(
   W: number,
   H: number,
   DPR: number,
   inside: boolean,
+  palette: "hero" | "spectrum",
+  others: WalkerState[] = [],
 ): WalkerState {
   const m = 140 * DPR;
   const w: WalkerState = {
     x: 0,
     y: 0,
     dir: 0,
-    color: WALKER_COLORS[Math.floor(Math.random() * WALKER_COLORS.length)],
+    color: pickWalkerColor(palette, others),
     body: rnd(0.85, 1.25),
     stepT: rnd(0.5, 0.62),
     turn: 0,
@@ -154,6 +173,8 @@ function stepWalker(
   H: number,
   DPR: number,
   influence: MouseInfluence | null,
+  palette: "hero" | "spectrum",
+  walkers: WalkerState[],
 ) {
   w.nextPause -= dt;
   if (w.nextPause < 0 && w.pause <= 0) {
@@ -230,7 +251,8 @@ function stepWalker(
 
   const m = 180 * DPR;
   if (w.x < -m || w.x > W + m || w.y < -m || w.y > H + m) {
-    const respawned = createWalker(W, H, DPR, false);
+    const others = walkers.filter((o) => o !== w);
+    const respawned = createWalker(W, H, DPR, false, palette, others);
     Object.assign(w, respawned);
   }
 }
@@ -397,6 +419,9 @@ export default function DotWalkers({ bright = false }: { bright?: boolean }) {
     const fctx2 = fctx;
     const loctx2 = loctx;
 
+    // Hero (first scene): white + 1–2 blue. Contact/bright keeps the spectrum.
+    const palette: "hero" | "spectrum" = bright ? "spectrum" : "hero";
+
     let W = 0;
     let H = 0;
     let DPR = 1;
@@ -473,9 +498,26 @@ export default function DotWalkers({ bright = false }: { bright?: boolean }) {
 
     function setCount(n: number) {
       while (walkers.length < n) {
-        walkers.push(createWalker(W, H, DPR, true));
+        walkers.push(createWalker(W, H, DPR, true, palette, walkers));
       }
       walkers.length = n;
+
+      // Hero: guarantee one or two blue accents among mostly white walkers.
+      if (palette === "hero" && walkers.length > 0) {
+        const target = Math.min(
+          HERO_ACCENT_MAX,
+          Math.max(1, Math.floor(Math.random() * HERO_ACCENT_MAX) + 1),
+        );
+        for (const w of walkers) w.color = HERO_WHITE;
+        const indices = walkers.map((_, i) => i);
+        for (let i = indices.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [indices[i], indices[j]] = [indices[j], indices[i]];
+        }
+        for (let k = 0; k < target; k++) {
+          walkers[indices[k]].color = HERO_BLUE;
+        }
+      }
     }
 
     function frame(now: number) {
@@ -509,7 +551,9 @@ export default function DotWalkers({ bright = false }: { bright?: boolean }) {
         };
       }
 
-      for (const w of walkers) stepWalker(w, dt, W, H, DPR, influence);
+      for (const w of walkers) {
+        stepWalker(w, dt, W, H, DPR, influence, palette, walkers);
+      }
 
       const sf = SS / (params.gap * DPR);
       fctx2.filter = "none";
